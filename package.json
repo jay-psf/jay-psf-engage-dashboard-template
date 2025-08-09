@@ -10,9 +10,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.21.3",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "next": "14.2.5",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-hook-form": "^7.62.0",
+    "recharts": "^3.1.2",
+    "zod": "^4.0.16",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",

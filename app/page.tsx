@@ -1,19 +1,21 @@
+'use client';
+import { useData } from "../store/useData";
+import { KpiCard } from "../components/KpiCard";
+import { SimpleChart } from "../components/SimpleChart";
+import { Money } from "../lib/format";
+
 export default function Page() {
+  const { totals, chartSeries } = useData();
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">Engage – Template Codespaces</h1>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          Se você está vendo esta página no Codespaces, o ambiente está pronto.
-        </p>
-      </header>
-
-      <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-6">
-        <ol className="list-decimal ml-6 space-y-2">
-          <li>Abra o terminal e rode <code className="px-1 py-0.5 rounded bg-neutral-100 dark:bg-neutral-900">pnpm dev</code></li>
-          <li>Acesse a URL de preview para ver a aplicação rodando</li>
-          <li>Faça commit e conecte na Vercel para deploy automático</li>
-        </ol>
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <KpiCard label="Receita Booked (YTD)" value={Money(totals.revenueYTD)} delta={totals.revenueDelta} />
+        <KpiCard label="Win Rate" value={`${(totals.winRate*100).toFixed(1)}%`} delta={totals.winRateDelta} />
+        <KpiCard label="Ativações em Execução" value={String(totals.activationsInFlight)} delta={totals.onTimePct} suffix="% On-time" />
+      </section>
+      <section className="card">
+        <div className="text-sm font-semibold mb-3">Receita por mês (mock)</div>
+        <SimpleChart data={chartSeries} xKey="month" yKey="revenue" />
       </section>
     </div>
   );

@@ -4,16 +4,22 @@ import { useEffect, useState } from 'react';
 export function Topbar(){
   const [dark, setDark] = useState(false);
   useEffect(()=>{
-    const stored = localStorage.getItem('theme');
-    const isDark = stored ? stored==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDark(isDark);
-    document.documentElement.classList.toggle('dark', isDark);
+    const stored = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
+    const isDark = stored ? stored==='dark' : (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setDark(!!isDark);
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', !!isDark);
+    }
   },[]);
   const toggle = ()=>{
     const next = !dark;
     setDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('theme', next ? 'dark' : 'light');
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', next);
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', next ? 'dark' : 'light');
+    }
   };
 
   return (

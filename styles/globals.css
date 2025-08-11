@@ -2,15 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg: #0b0e14;
-  --fg: #e6e6e6;
+@layer base{
+  :root{ color-scheme: light dark; }
+  html, body, #__next{ height:100%; }
+  body{ @apply bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200; }
 }
 
-html, body {
-  height: 100%;
-}
-
-body {
-  @apply antialiased;
+@layer components{
+  .card{
+    @apply bg-white dark:bg-neutral-800 rounded-2xl p-4 md:p-6 border border-neutral-200/60 dark:border-neutral-700/60;
+    box-shadow: var(--shadow-soft);
+  }
+  .kpi-title{ @apply text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400; }
+  .kpi-value{ @apply text-2xl md:text-3xl font-semibold; }
+  .chip{
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs;
+  }
+  .chip--success{ @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300; }
+  .chip--warning{ @apply bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300; }
+  .chip--danger{ @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300; }
+  .btn{
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-neutral-300/60 dark:border-neutral-700/60 hover:bg-neutral-100 dark:hover:bg-neutral-800;
+  }
+  .sidebar-link{
+    @apply flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800;
+  }
+  .topbar{
+    @apply sticky top-0 z-40 backdrop-blur bg-white/70 dark:bg-neutral-900/60 border-b border-neutral-200/60 dark:border-neutral-800/60;
+  }
 }

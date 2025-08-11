@@ -1,15 +1,30 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss'
 
-const config: Config = {
+export default {
   darkMode: 'class',
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './styles/**/*.{css}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: 'hsl(var(--primary))',
+        success: 'hsl(var(--success))',
+        warning: 'hsl(var(--warning))',
+        danger:  'hsl(var(--danger))',
+        neutral: {
+          50:  'hsl(var(--neutral-50))',
+          100: 'hsl(var(--neutral-100))',
+          200: 'hsl(var(--neutral-200))',
+          300: 'hsl(var(--neutral-300))',
+          400: 'hsl(var(--neutral-400))',
+          500: 'hsl(var(--neutral-500))',
+          600: 'hsl(var(--neutral-600))',
+          700: 'hsl(var(--neutral-700))',
+          800: 'hsl(var(--neutral-800))',
+          900: 'hsl(var(--neutral-900))',
+        }
+      },
+      borderRadius: { '2xl':'var(--radius-2xl)' }
+    }
   },
   plugins: [],
-};
-export default config;
+} satisfies Config

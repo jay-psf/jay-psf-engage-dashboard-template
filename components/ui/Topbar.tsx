@@ -1,17 +1,16 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Button from "./Button";
 
-type Session = { role: "admin" | "sponsor"; brand?: string; username?: string };
+type Session = { role?: "admin" | "sponsor"; brand?: string; username?: string };
 
 function readSession(): Session {
-  try { const raw = window.localStorage.getItem("session"); return raw ? JSON.parse(raw) : { role: "admin" }; }
-  catch { return { role: "admin" }; }
+  try { const raw = window.localStorage.getItem("session"); return raw ? JSON.parse(raw) : {}; }
+  catch { return {}; }
 }
 
 export default function Topbar() {
-  const [s, setS] = useState<Session>({ role: "admin" });
+  const [s, setS] = useState<Session>({});
   useEffect(() => setS(readSession()), []);
   const isSponsor = s.role === "sponsor";
   const brand = (s.brand || "acme").toLowerCase();
@@ -24,7 +23,6 @@ export default function Topbar() {
           <div className="w-3 h-3 rounded-full bg-accent" />
           <span className="font-semibold">Engage Dashboard</span>
         </div>
-
         <div className="ml-auto flex items-center gap-4">
           {isSponsor && (
             <div className="relative w-[150px] h-8">
@@ -32,7 +30,7 @@ export default function Topbar() {
             </div>
           )}
           <form action="/api/logout" method="post">
-            <Button type="submit" variant="outline" size="sm">Sair</Button>
+            <button className="px-3 py-1.5 rounded-lg border text-sm">Sair</button>
           </form>
         </div>
       </div>

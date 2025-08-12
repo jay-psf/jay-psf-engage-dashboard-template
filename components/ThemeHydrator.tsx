@@ -13,13 +13,11 @@ function readSession(): Sess {
 
 export default function ThemeHydrator() {
   const pathname = usePathname();
-
   useEffect(() => {
     const s = readSession();
     const html = document.documentElement;
     if (s.role === "sponsor") html.setAttribute("data-theme", "dark");
     else html.removeAttribute("data-theme");
   }, [pathname]);
-
   return null;
 }

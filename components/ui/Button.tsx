@@ -1,26 +1,41 @@
 "use client";
 import clsx from "clsx";
-import { ButtonHTMLAttributes } from "react";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "solid" | "outline";
-  size?: "md" | "lg";
-};
+export default function Button({
+  children,
+  size = "md",
+  variant = "primary",
+  className,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  size?: "sm" | "md" | "lg";
+  variant?: "primary" | "outline";
+}) {
+  const sizes = {
+    sm: "h-9 px-3 text-xs",
+    md: "h-10 px-4 text-sm",
+    lg: "h-11 px-5 text-sm",
+  }[size];
 
-export default function Button({ className, variant="solid", size="md", ...props }: Props){
+  const variants = {
+    primary:
+      "bg-[var(--accent)] text-white border border-[var(--accent-600)] hover:shadow-soft",
+    outline:
+      "bg-transparent text-[var(--text)] border border-border hover:shadow-soft",
+  }[variant];
+
   return (
     <button
-      {...props}
       className={clsx(
-        "inline-flex items-center justify-center rounded-full transition",
-        "focus:outline-none focus-visible:ring-4",
-        variant==="solid"
-          ? "bg-[var(--accent)] text-white shadow-[0_6px_18px_rgba(0,167,221,.25)] hover:opacity-95"
-          : "bg-transparent text-[var(--text)] border border-[var(--borderC)] hover:border-[var(--accent)]",
-        size==="lg" ? "h-12 px-6 text-[15px] font-semibold" : "h-11 px-5 text-[14px] font-semibold",
+        "rounded-full transition focus-visible:outline-none focus-visible:ring-4",
+        "focus-visible:ring-[var(--ring)]",
+        sizes,
+        variants,
         className
       )}
-      style={{ boxShadow: "var(--elev)" }}
-    />
+      {...props}
+    >
+      {children}
+    </button>
   );
 }

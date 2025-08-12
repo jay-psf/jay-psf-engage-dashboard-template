@@ -1,3 +1,8 @@
+set -euo pipefail
+
+echo "== Regravando components/lib/session.ts =="
+mkdir -p components/lib
+cat > components/lib/session.ts <<'TS'
 "use client";
 
 export type Role = "admin" | "sponsor";
@@ -18,3 +23,7 @@ export function readSession(): Session {
   const username = readCookie("username");
   return { role, brand, username };
 }
+TS
+
+echo "== Build =="
+pnpm build || true

@@ -1,54 +1,69 @@
-:root{
-  /* Light (admin) */
-  --accent:#00A7DD;
-  --accent-ink:#03212B;
-  --bg:#F3F6FA;            /* levemente azulada p/ contraste */
-  --card:#FFFFFF;
-  --surface:#F7FAFF;       /* topo/controles */
-  --text:#0A1322;
-  --muted:#5F6B7A;
-  --borderC:rgba(15,23,42,.14);
-  --ring:rgba(0,167,221,.35);
-  --shadow:0 10px 30px rgba(2,32,71,.08);
-
-  --radius:16px;
-  --radius-lg:20px;
+:root {
+  /* Light */
+  --accent: #6B4EFF; /* roxo entourage */
+  --accent-600: #5B3CF2;
+  --accent-700: #4B2FE0;
+  --bg: #F7F8FB;
+  --card: #FFFFFF;
+  --surface: #F2F4FA;
+  --text: #0B1524;
+  --muted: #667085;
+  --borderC: rgba(16,24,40,0.10);
+  --ring: rgba(107,78,255,.35);
+  --elev: 0 10px 30px rgba(2,32,71,.08);
+  --radius: 16px;
+  --radius-lg: 20px;
 }
 
-:root[data-theme="dark"]{
-  /* Dark (sponsor) */
-  --accent:#00A7DD;
-  --accent-ink:#02141B;
-  --bg:#0A111C;           /* fundo “navy” */
-  --card:#0F1726;         /* cards */
-  --surface:#0B1422;      /* appbar/menus */
-  --text:#E7EAF0;
-  --muted:#A4ADBA;
-  --borderC:rgba(255,255,255,.12);
-  --ring:rgba(0,167,221,.55);
-  --shadow:0 14px 36px rgba(0,0,0,.35);
+:root[data-theme="dark"] {
+  /* Dark */
+  --accent: #8C7BFF;
+  --accent-600: #7D6AFC;
+  --accent-700: #6A54F0;
+  --bg: #0B1220;
+  --card: #0F1627;
+  --surface: #0C1322;
+  --text: #E6E8EC;
+  --muted: #A5ADBB;
+  --borderC: rgba(255,255,255,0.10);
+  --ring: rgba(140,123,255,.45);
+  --elev: 0 14px 36px rgba(0,0,0,.35);
 }
 
 /* Base */
-html,body{background:var(--bg);color:var(--text)}
+html, body { background: var(--bg); color: var(--text); }
 
-/* Helpers */
-.bg-card{background:var(--card)}
-.bg-surface{background:var(--surface)}
-.text-muted{color:var(--muted)}
-.border{border:1px solid var(--borderC)}
-.border-border{border-color:var(--borderC)}
-.rounded-xl{border-radius:var(--radius)}
-.rounded-2xl{border-radius:var(--radius-lg)}
-.shadow-soft{box-shadow:var(--shadow)}
+/* Utilitários */
+.bg-card { background: var(--card); }
+.bg-surface { background: var(--surface); }
+.text-muted { color: var(--muted); }
+.border { border: 1px solid var(--borderC); }
+.border-border { border-color: var(--borderC); }
+.rounded-xl { border-radius: var(--radius); }
+.rounded-2xl { border-radius: var(--radius-lg); }
+.shadow-soft { box-shadow: var(--elev); }
 
 /* Inputs */
-.input{
-  height:44px;width:100%;
-  border:1px solid var(--borderC);
-  background:var(--surface);
-  padding:0 12px;border-radius:12px;
-  outline:none;transition:box-shadow .15s ease,border-color .15s ease,background .15s;
+.input {
+  height: 44px; width: 100%;
+  border: 1px solid var(--borderC);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 0 12px;
 }
-.input::placeholder{color:var(--muted)}
-.input:focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--accent);background:var(--card)}
+.input:focus {
+  outline: 0;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* Botões básicos (fallback caso o componente Button não seja usado) */
+.btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--borderC);
+  background: var(--accent);
+  color: #fff;
+}
+.btn:hover { filter: brightness(1.05); box-shadow: var(--elev); }

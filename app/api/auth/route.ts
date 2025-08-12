@@ -1,33 +1,23 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+
+// mapeamento simples => no futuro vamos buscar no DB
+const USERS = {
+  admin: { password: "123456", role: "admin" as const, brand: null },
+  sponsor: { password: "000000", role: "sponsor" as const, brand: "acme" },
+};
 
 export async function POST(req: Request) {
-  try {
-    const { username, password, brand } = await req.json();
+  const { username, password } = await req.json();
 
-    // Admin: user=admin, pass=123456
-    if (username === "admin" && password === "123456") {
-      const res = NextResponse.json(
-        { ok: true, redirect: "/" },
-        { status: 200 }
-      );
-      res.cookies.set("role", "admin", { path: "/", httpOnly: false });
-      res.cookies.set("brand", "", { path: "/", httpOnly: false });
-      return res;
-    }
-
-    // Sponsor: user=sponsor, pass=000000 (brand obrigatório)
-    if (username === "sponsor" && password === "000000" && brand) {
-      const res = NextResponse.json(
-        { ok: true, redirect: `/sponsor/${encodeURIComponent(brand)}/overview` },
-        { status: 200 }
-      );
-      res.cookies.set("role", "sponsor", { path: "/", httpOnly: false });
-      res.cookies.set("brand", brand, { path: "/", httpOnly: false });
-      return res;
-    }
-
-    return NextResponse.json({ ok: false, message: "Credenciais inválidas" }, { status: 401 });
-  } catch {
-    return NextResponse.json({ ok: false, message: "Erro no login" }, { status: 400 });
+  const user = (USERS as any)[username];
+  if (!user || user.password !== password) {
+    return NextResponse.json({ ok: false }, { status: 401 });
   }
+
+  // seta cookies para o middleware/layout/sidebar/topbar
+  const res = NextResponse.json({ ok: true, role: user.role, brand: user.brand });
+  res.cookies.set("role", user.role, { path: "/" });
+  if (user.brand) res.cookies.set("brand", user.brand, { path: "/" });
+  return res;
 }

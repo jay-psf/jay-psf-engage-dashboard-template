@@ -1,23 +1,39 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Topbar() {
-  const pathname = usePathname();
+  const [role, setRole] = useState<"admin"|"sponsor">("admin");
+  const [brand, setBrand] = useState<string>("");
+
+  useEffect(() => {
+    const body = document.body;
+    setRole((body.dataset.role as any) || "admin");
+    setBrand(body.dataset.brand || "");
+  }, []);
+
   return (
-    <header className="w-full sticky top-0 z-40 border-b" style={{borderColor:"var(--border)", backdropFilter: "saturate(180%) blur(4px)"}}>
+    <header className="sticky top-0 z-40 w-full" style={{ background:"rgba(10,14,26,.75)", backdropFilter:"saturate(160%) blur(8px)" }}>
       <div className="max-w-screen-2xl mx-auto px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="size-7 rounded-md" style={{background:"var(--brand-accent)"}} />
-          <span className="font-display font-semibold tracking-wide">Engage Dashboard</span>
+          <div className="w-3 h-3 rounded" style={{ background:"var(--brand-accent)" }} />
+          <span className="font-semibold">Engage Dashboard</span>
         </div>
-        <nav className="flex items-center gap-3 text-sm">
-          <code className="px-2 py-1 rounded border hidden md:block" style={{borderColor:"var(--border)"}}>{pathname}</code>
-          <form action="/api/logout" method="post">
-            <button className="btn btn-outline">Sair</button>
-          </form>
-          <Link href="/login" className="btn btn-primary">Login</Link>
-        </nav>
+
+        <div className="flex items-center gap-3">
+          {role === "sponsor" && brand ? (
+            <img src={`/logos/${brand}.svg`} alt={brand} className="h-7 rounded-lg border"
+                 style={{ borderColor:"var(--border)" }}/>
+          ) : (
+            <span className="px-3 py-1 rounded-full text-sm" style={{ background:"var(--panel)", border:"1px solid var(--border)" }}>
+              Engage (interno)
+            </span>
+          )}
+          <Link href="/api/logout" className="px-3 py-1 rounded-full text-sm"
+                style={{ background:"transparent", border:"1px solid var(--border)", color:"var(--text)" }}>
+            Sair
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -8,19 +8,21 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
   const isLogin = pathname === "/login";
 
   if (isLogin) {
-    // Tela de login full-screen, sem chrome
+    // No chrome na tela de login
     return (
-      <div className="min-h-screen">{children}</div>
+      <main className="min-h-screen grid place-items-center px-4">
+        <div className="w-full max-w-4xl">{children}</div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+    <>
       <Topbar />
       <div className="mx-auto grid max-w-screen-2xl grid-cols-[260px,1fr] gap-6 p-6">
         <Sidebar />
         <main className="min-h-[70vh]">{children}</main>
       </div>
-    </div>
+    </>
   );
 }

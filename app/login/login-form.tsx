@@ -35,7 +35,7 @@ export default function LoginForm() {
         >
           <h2 className="text-lg font-semibold mb-1">Patrocinador</h2>
           <p className="text-sm text-neutral-600">
-            Acesso ao portal do patrocinador: visão de contrato, agenda, resultados e financeiro.
+            Acesso ao portal do patrocinador: contrato, agenda, resultados e financeiro.
           </p>
         </section>
 
@@ -48,7 +48,7 @@ export default function LoginForm() {
           <h1 className="text-xl font-semibold mb-4">Entrar</h1>
 
           {err && (
-            <div className="mb-4 text-sm text-danger-700 bg-danger-50 border border-danger-200 rounded p-3">
+            <div className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded p-3">
               Usuário ou senha inválidos para o perfil selecionado.
             </div>
           )}
@@ -63,6 +63,7 @@ export default function LoginForm() {
                 placeholder={role === "admin" ? "admin" : "sponsor"}
                 className="w-full border rounded px-3 py-2"
                 required
+                autoComplete="username"
               />
             </div>
             <div>
@@ -75,6 +76,7 @@ export default function LoginForm() {
                 placeholder={role === "admin" ? "123456" : "000000"}
                 className="w-full border rounded px-3 py-2"
                 required
+                autoComplete="current-password"
               />
             </div>
 

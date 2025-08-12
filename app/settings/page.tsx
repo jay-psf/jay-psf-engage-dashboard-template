@@ -1,30 +1,48 @@
-export const metadata = { title: "Settings • Engage" };
+"use client";
+import { useEffect, useState } from "react";
+
+type ThemePref = "light" | "dark" | "system";
+
 export default function SettingsPage() {
+  const [pref, setPref] = useState<ThemePref>("system");
+
+  useEffect(() => {
+    const stored = (localStorage.getItem("theme") as ThemePref) || "system";
+    setPref(stored);
+  }, []);
+
+  function applyTheme(next: ThemePref) {
+    localStorage.setItem("theme", next);
+    setPref(next);
+    const m = window.matchMedia("(prefers-color-scheme: dark)");
+    const effective = next === "system" ? (m.matches ? "dark" : "light") : next;
+    const html = document.documentElement;
+    if (effective === "dark") html.setAttribute("data-theme","dark");
+    else html.removeAttribute("data-theme");
+  }
+
   return (
-    <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-      <h1 className="text-xl font-semibold">Dados da Empresa</h1>
-      <p className="mt-2 text-sm text-muted">Configure nome, CNPJ, e-mail e telefone.</p>
-      <form className="mt-6 grid gap-4 md:grid-cols-2">
-        <label className="block">
-          <div className="text-sm mb-1">Nome</div>
-          <input className="input rounded-xl" placeholder="Ex.: Heineken Brasil" />
-        </label>
-        <label className="block">
-          <div className="text-sm mb-1">CNPJ</div>
-          <input className="input rounded-xl" placeholder="00.000.000/0000-00" />
-        </label>
-        <label className="block">
-          <div className="text-sm mb-1">E-mail</div>
-          <input className="input rounded-xl" placeholder="contato@empresa.com" />
-        </label>
-        <label className="block">
-          <div className="text-sm mb-1">Telefone</div>
-          <input className="input rounded-xl" placeholder="(11) 99999-9999" />
-        </label>
-        <div className="md:col-span-2">
-          <button type="button" className="px-5 py-2.5 rounded-xl bg-accent text-white shadow-soft">Salvar</button>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">Settings</h1>
+
+      <section className="bg-card border border-border rounded-2xl shadow-soft p-6">
+        <h2 className="text-lg font-semibold">Aparência</h2>
+        <p className="text-sm text-muted mt-1">
+          Escolha como o Engage deve se ajustar ao seu tema.
+        </p>
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          {(["light","dark","system"] as ThemePref[]).map(opt => (
+            <button
+              key={opt}
+              onClick={() => applyTheme(opt)}
+              className={`btn ${pref===opt ? "btn-primary" : "btn-outline"}`}
+            >
+              {opt === "light" ? "Light" : opt === "dark" ? "Dark" : "System"}
+            </button>
+          ))}
         </div>
-      </form>
-    </section>
+      </section>
+    </div>
   );
 }

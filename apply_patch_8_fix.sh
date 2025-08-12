@@ -1,3 +1,7 @@
+set -euo pipefail
+echo "== Corrigindo <img> na Topbar (style -> className) =="
+
+cat > components/ui/Topbar.tsx <<'TSX'
 "use client";
 import { readCookie } from "@/components/lib/session";
 
@@ -38,3 +42,7 @@ export default function Topbar() {
     </header>
   );
 }
+TSX
+
+echo "== Build =="
+pnpm build

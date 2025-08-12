@@ -1,5 +1,5 @@
 :root{
-  /* Brand / Accent (roxo) */
+  /* Brand */
   --accent:#7E3AF2; --accent-600:#6C2BD9; --accent-700:#5B21B6;
 
   /* Light */
@@ -7,63 +7,81 @@
   --text:#0B1524; --muted:#667085; --borderC:rgba(16,24,40,.12);
 
   /* Dark */
-  --bg-dark:#0B1220; --card-dark:#0A1020; --surface-dark:#090E1A;
+  --bg-dark:#0B1220; --card-dark:#0B0F1A; --surface-dark:#0A0E18;
   --text-dark:#E6E8EC; --muted-dark:#9BA3AF; --borderC-dark:rgba(255,255,255,.10);
 
-  /* Sombras/halos */
-  --elev:0 10px 30px rgba(2,32,71,.08);
-  --elev-strong:0 18px 50px rgba(2,32,71,.15);
-  --elev-dark:0 14px 36px rgba(0,0,0,.35);
-
-  /* Iris/Glow refinado */
-  --ring:rgba(126,58,242,.35);
-  --ring-strong:rgba(126,58,242,.60);
-  --halo:0 0 0 8px var(--ring);
-  --halo-strong:0 0 0 12px var(--ring-strong);
-
-  /* Radius */
+  /* Raio & sombras */
   --radius:16px; --radius-lg:22px;
+  --elev:0 10px 30px rgba(2,32,71,.08);
+  --elev-strong:0 18px 50px rgba(2,32,71,.16);
+  --elev-dark:0 18px 46px rgba(0,0,0,.50);
+
+  /* Halos */
+  --ring:rgba(126,58,242,.40);
+  --ring-strong:rgba(126,58,242,.70);
+
+  /* Glass */
+  --glass-bg: rgba(255,255,255,.60);
+  --glass-brd: rgba(255,255,255,.35);
+  --glass-bg-dark: rgba(8,10,18,.55);
+  --glass-brd-dark: rgba(255,255,255,.10);
 }
 
+/* Tema dark aplicado via [data-theme] no <html> */
 :root[data-theme="dark"]{
   --bg:var(--bg-dark); --card:var(--card-dark); --surface:var(--surface-dark);
   --text:var(--text-dark); --muted:var(--muted-dark); --borderC:var(--borderC-dark);
 }
 
-/* Base com gradiente sutil fixo */
-html,body{
-  background: var(--bg);
-  color: var(--text);
-  min-height:100%;
-  background-image:
-    radial-gradient(1200px 600px at 10% -20%, rgba(126,58,242,.06), transparent 45%),
-    radial-gradient(900px 500px at 90% -10%, rgba(126,58,242,.04), transparent 50%);
-  background-attachment: fixed;
+html,body{ background:var(--bg); color:var(--text); min-height:100%; }
+
+/* utilitários simples */
+.bg-card{ background:var(--card); }
+.bg-surface{ background:var(--surface); }
+.text-muted{ color:var(--muted); }
+.border{ border:1px solid var(--borderC); }
+.border-border{ border-color:var(--borderC); }
+.rounded-xl{ border-radius:var(--radius); }
+.rounded-2xl{ border-radius:var(--radius-lg); }
+.shadow-soft{ box-shadow:var(--elev); }
+.shadow-strong{ box-shadow:var(--elev-strong); }
+
+/* GLASS */
+.glass {
+  position: sticky; top:0; z-index:50;
+  backdrop-filter:saturate(160%) blur(12px);
+  background: var(--glass-bg);
+  border-bottom:1px solid var(--glass-brd);
+}
+:root[data-theme="dark"] .glass{
+  background: var(--glass-bg-dark);
+  border-bottom:1px solid var(--glass-brd-dark);
+  box-shadow:0 10px 35px rgba(0,0,0,.25);
 }
 
-/* Helpers */
-.bg-card{background:var(--card);}
-.bg-surface{background:var(--surface);}
-.text-muted{color:var(--muted);}
-.border{border:1px solid var(--borderC);}
-.border-border{border-color:var(--borderC);}
-.rounded-xl{border-radius:var(--radius);}
-.rounded-2xl{border-radius:var(--radius-lg);}
-.shadow-soft{box-shadow:var(--elev);}
+/* Botão base com glow sutil porém impactante */
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  height:42px; padding:0 16px; border-radius:999px;
+  border:1px solid var(--borderC); background:var(--card); color:var(--text);
+  transition:transform .12s ease, box-shadow .12s ease, background .2s ease, border-color .2s ease;
+}
+:root[data-theme="dark"] .btn{ background: #0F1322; border-color:var(--borderC-dark); }
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 30px rgba(126,58,242,.20), 0 0 0 8px var(--ring);
+  border-color: var(--accent-600);
+}
+.btn:active{ transform:translateY(0); box-shadow:0 4px 14px rgba(126,58,242,.18); }
+.btn-primary{ background:var(--accent); color:white; border-color:transparent; }
+.btn-primary:hover{ box-shadow:0 10px 34px rgba(126,58,242,.35), 0 0 0 10px var(--ring); }
 
-/* Glow utilitário (sutil porém impactante) */
-.glow-iris{ box-shadow: 0 0 0 0 rgba(0,0,0,0), 0 0 24px rgba(126,58,242,.18); }
-.glow-iris:hover{ box-shadow: 0 0 0 0 rgba(0,0,0,0), 0 0 42px rgba(126,58,242,.28); }
+.btn-outline{ background:transparent; }
+.btn-muted{ background:var(--surface); }
+:root[data-theme="dark"] .btn-muted{ background:#0C1221; }
 
-/* Lift on hover/press */
-.hover-lift{ transition: transform .18s ease, box-shadow .18s ease; }
-.hover-lift:hover{ transform: translateY(-2px); }
-.pressable:active{ transform: translateY(0); }
-
-/* Inputs simples */
-.input{height:48px;width:100%;border:1px solid var(--borderC);background:var(--surface);border-radius:14px;padding:0 12px;color:var(--text);}
-
-/* Pills de navegação topo */
-.pill{border-radius:999px;padding:.5rem .9rem;border:1px solid var(--borderC);background:transparent;color:var(--text);display:inline-flex;gap:.5rem;align-items:center;transition:background .18s ease, color .18s ease, box-shadow .18s ease;}
-.pill:hover{background:var(--surface);}
-.pill.active{background:var(--accent);color:white;border-color:transparent;box-shadow:0 8px 20px rgba(126,58,242,.35);}
+.input{
+  height:46px; width:100%; border:1px solid var(--borderC);
+  background:var(--surface); border-radius:14px; padding:0 14px;
+}
+:root[data-theme="dark"] .input{ background:#0C1221; border-color:var(--borderC-dark); }

@@ -1,3 +1,9 @@
+set -euo pipefail
+echo "== Patch 34c: regrava Login como Client Page válida + corrige RoleSwitch =="
+
+# 1) Regrava a página /login com Client Component + export default
+mkdir -p app/login
+cat > app/login/page.tsx <<'TSX'
 "use client";
 
 import { useEffect, useState } from "react";
@@ -94,3 +100,13 @@ export default function LoginPage(){
     </main>
   );
 }
+TSX
+
+# 2) Corrige o warning do RoleSwitch (deps do useEffect)
+if test -f components/ui/RoleSwitch.tsx; then
+  # Garante que o efeito notifique quando onChange mudar
+  perl -0777 -pe 's/useEffect\(\s*\(\)\s*=>\s*\{\s*if\s*\(onChange\)\s*onChange\(localRole\);\s*\}\s*,\s*\[localRole\]\s*\);/useEffect(() => { if (onChange) onChange(localRole); }, [localRole, onChange]);/gs' -i components/ui/RoleSwitch.tsx || true
+fi
+
+echo "== Build =="
+pnpm build

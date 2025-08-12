@@ -1,3 +1,9 @@
+set -euo pipefail
+
+echo "== Patch 33 Hotfix: helpers de tema exportados =="
+
+mkdir -p components/lib
+cat > components/lib/session.ts <<'TS'
 "use client";
 
 export type Role = "admin" | "sponsor";
@@ -58,3 +64,7 @@ export function applyThemeFromStorage(role?: Role){
   const pref = getThemePref();
   setThemeAttr(pref, role);
 }
+TS
+
+echo "== Build =="
+pnpm build

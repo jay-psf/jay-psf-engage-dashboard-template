@@ -1,32 +1,9 @@
-@import "./effects.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-  :root{ color-scheme: light dark; }
-  *{ box-sizing:border-box; }
-}
+@import "./tokens.css";
 
-@layer components{
-  .btn{
-    height:40px; border-radius:18px; padding:0 14px;
-    display:inline-flex; align-items:center; gap:8px;
-    border:1px solid var(--borderC);
-    background:var(--card); color:var(--text);
-    transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease, background .18s ease;
-  }
-  .btn:hover{ box-shadow: var(--halo); transform: translateY(-1px) scale(1.01); }
-  .btn:active{ transform: translateY(1px) scale(.99); }
-  .btn-primary{ background: var(--accent); border-color:transparent; color:#fff; }
-  .btn-primary:hover{ box-shadow: var(--halo-strong); }
-  .btn-outline{ background:transparent; }
-  .card{ background:var(--card); border:1px solid var(--borderC); border-radius:20px; box-shadow:var(--elev); }
-}
-
-@layer utilities{
-  .fade-in{ animation: fadeIn .25s ease forwards; }
-}
-
-/* Utilitário para esconder subnav duplicado no sponsor */
-.subnav-hidden{ display:none !important; }
+:root, html, body{ font-feature-settings:"ss01","cv08"; }
+a { text-decoration:none; color:inherit; }
+.container{ width:100%; max-width:1200px; margin:0 auto; padding:0 16px; }

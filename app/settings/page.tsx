@@ -7,7 +7,7 @@ export default function AdminSettingsPage(){
   const { role } = readSession();
   const [pref, setPref] = useState<"light"|"dark"|"system">("system");
 
-  useEffect(()=>{ setPref(getThemePref()); },[]);
+  useEffect(()=>{ setPref(getThemePref() ?? "system"); },[]);
   useEffect(()=>{ setThemeAttr(pref, role); saveThemePref(pref); },[pref, role]);
 
   return (

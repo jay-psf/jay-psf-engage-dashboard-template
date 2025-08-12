@@ -1,3 +1,8 @@
+set -euo pipefail
+echo "== Patch 27: sponsor header sem sub-menu e logo 2x =="
+
+mkdir -p components/sponsor
+cat > components/sponsor/BrandHeader.tsx <<'TSX'
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import * as React from "react";
@@ -53,3 +58,7 @@ export default function BrandHeader({ brand = "heineken" }: Props) {
     </div>
   );
 }
+TSX
+
+echo "== Build =="
+pnpm -s build

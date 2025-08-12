@@ -1,46 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
+import { saveThemePref, getThemePref, setThemeAttr, readSession } from "@/components/lib/session";
+import Button from "@/components/ui/Button";
 
-type ThemePref = "light" | "dark" | "system";
+export default function AdminSettingsPage(){
+  const { role } = readSession();
+  const [pref, setPref] = useState<"light"|"dark"|"system">("system");
 
-export default function SettingsPage() {
-  const [pref, setPref] = useState<ThemePref>("system");
-
-  useEffect(() => {
-    const stored = (localStorage.getItem("theme") as ThemePref) || "system";
-    setPref(stored);
-  }, []);
-
-  function applyTheme(next: ThemePref) {
-    localStorage.setItem("theme", next);
-    setPref(next);
-    const m = window.matchMedia("(prefers-color-scheme: dark)");
-    const effective = next === "system" ? (m.matches ? "dark" : "light") : next;
-    const html = document.documentElement;
-    if (effective === "dark") html.setAttribute("data-theme","dark");
-    else html.removeAttribute("data-theme");
-  }
+  useEffect(()=>{ setPref(getThemePref()); },[]);
+  useEffect(()=>{ setThemeAttr(pref, role); saveThemePref(pref); },[pref, role]);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Settings</h1>
-
-      <section className="bg-card border border-border rounded-2xl shadow-soft p-6">
-        <h2 className="text-lg font-semibold">Aparência</h2>
-        <p className="text-sm text-muted mt-1">
-          Escolha como o Engage deve se ajustar ao seu tema.
-        </p>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          {(["light","dark","system"] as ThemePref[]).map(opt => (
-            <button
-              key={opt}
-              onClick={() => applyTheme(opt)}
-              className={`btn ${pref===opt ? "btn-primary" : "btn-outline"}`}
-            >
-              {opt === "light" ? "Light" : opt === "dark" ? "Dark" : "System"}
-            </button>
-          ))}
+      <h1 className="text-xl font-semibold">Configurações</h1>
+      <section className="bg-card border border-border rounded-2xl p-4">
+        <div className="font-medium mb-2">Tema</div>
+        <div className="flex gap-2">
+          <Button variant={pref==="light"?"primary":"outline"} onClick={()=>setPref("light")}>Light</Button>
+          <Button variant={pref==="dark"?"primary":"outline"} onClick={()=>setPref("dark")}>Dark</Button>
+          <Button variant={pref==="system"?"primary":"outline"} onClick={()=>setPref("system")}>Sistema</Button>
         </div>
       </section>
     </div>

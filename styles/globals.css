@@ -1,3 +1,4 @@
+@import "./effects.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,3 +27,6 @@
 @layer utilities{
   .fade-in{ animation: fadeIn .25s ease forwards; }
 }
+
+/* Utilitário para esconder subnav duplicado no sponsor */
+.subnav-hidden{ display:none !important; }

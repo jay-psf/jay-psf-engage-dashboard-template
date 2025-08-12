@@ -1,34 +1,38 @@
-export default function AdminOverview(){
-  return (
-    <div className="section">
-      <header className="section" style={{marginBottom:"var(--space-6)"}}>
-        <h1>Visão geral</h1>
-        <p className="text-[var(--muted)]" style={{marginTop:"6px"}}>Resumo operacional e pipeline</p>
-      </header>
+"use client";
 
-      <div className="kpi-grid section">
-        <div className="card"><div className="card-body kpi"><span className="label">Projetos ativos</span><span className="value">14</span></div></div>
-        <div className="card"><div className="card-body kpi"><span className="label">Leads no pipeline</span><span className="value">52</span></div></div>
-        <div className="card"><div className="card-body kpi"><span className="label">Conversão</span><span className="value">18%</span></div></div>
-        <div className="card"><div className="card-body kpi"><span className="label">Receita (Mês)</span><span className="value">R$ 214k</span></div></div>
+import Section from "@/components/ui/Section";
+import Card from "@/components/ui/Card";
+import Metric from "@/components/ui/Metric";
+import ChartSpark from "@/components/ui/ChartSpark";
+
+export default function AdminHome(){
+  return (
+    <div className="container-xl">
+      <Section
+        title="Visão geral"
+        caption="Acompanhe indicadores dos projetos e da operação."
+      />
+
+      <div className="grid-g grid-3 mb-5">
+        <Card><Metric label="Projetos ativos" value="24" /></Card>
+        <Card><Metric label="Patrocinadores" value="12" /></Card>
+        <Card><Metric label="Receita (Mês)" value="R$ 842k" /></Card>
       </div>
 
-      <div className="section card">
-        <div className="card-body">
-          <div className="card-title">Pipeline recente</div>
-          <div style={{overflowX:"auto"}}>
-            <table className="table">
-              <thead><tr><th>Empresa</th><th>Fase</th><th>Owner</th><th>Valor</th></tr></thead>
-              <tbody>
-                <tr><td>Heineken</td><td>Proposta</td><td>Ana</td><td>R$ 80k</td></tr>
-                <tr><td>ACME</td><td>Descoberta</td><td>João</td><td>R$ 25k</td></tr>
-                <tr><td>Natura</td><td>Negociação</td><td>Maria</td><td>R$ 60k</td></tr>
-                <tr><td>Itaú</td><td>Fechado</td><td>Carlos</td><td>R$ 49k</td></tr>
-              </tbody>
-              <tfoot><tr><td colSpan={4}>Dados ilustrativos</td></tr></tfoot>
-            </table>
+      <div className="grid-g grid-2">
+        <Card title="Pipeline" subtitle="Entradas nas últimas 8 semanas">
+          <div className="flex items-center justify-between">
+            <ChartSpark data={[2,3,3,4,6,7,9,12]} />
+            <div className="text-[13px] text-[var(--muted)]">+38% vs período anterior</div>
           </div>
-        </div>
+        </Card>
+
+        <Card title="Performance de entregas" subtitle="SLA médio por projeto">
+          <div className="flex items-center justify-between">
+            <ChartSpark data={[7,7,6,6,5,5,4,4]} />
+            <div className="text-[13px] text-[var(--muted)]">Melhora constante</div>
+          </div>
+        </Card>
       </div>
     </div>
   );

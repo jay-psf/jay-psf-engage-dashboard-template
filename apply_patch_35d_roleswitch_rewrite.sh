@@ -1,3 +1,8 @@
+set -euo pipefail
+echo "== Patch 35d: reescreve RoleSwitch limpo e tipado =="
+
+mkdir -p components/ui
+cat > components/ui/RoleSwitch.tsx <<'TSX'
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -86,3 +91,7 @@ export default function RoleSwitch({
     </div>
   );
 }
+TSX
+
+echo "== Build =="
+pnpm build

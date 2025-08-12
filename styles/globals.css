@@ -2,40 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-html,body{ background:var(--bg); color:var(--text); }
+/* Google Fonts (Inter / Sora) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap");
+@import "./tokens.css";
 
-/* títulos mais contidos */
-:where(h1){ font-size:var(--fs-h2); line-height:1.15; letter-spacing:-0.01em; font-weight:700; }
-:where(h2){ font-size:var(--fs-h3); line-height:1.18; font-weight:700; }
-:where(h3){ font-size:var(--fs-h4); line-height:1.2;  font-weight:600; }
-:where(p,li,td,th){ font-size:var(--fs-md); }
+:root, :root[data-theme="dark"] { color-scheme: light dark; }
 
-/* container com respiro */
-.page{ max-width:var(--container); margin:0 auto; padding: var(--space-6) var(--space-6) var(--space-10); }
+html, body { font-family: var(--font-sans); }
+.h-display { font-family: var(--font-display); letter-spacing: -0.01em; }
 
-/* cards */
-.card{ background:var(--card); border:1px solid var(--borderC); border-radius:var(--radius); box-shadow:var(--elev); }
-:root[data-theme="dark"] .card{ box-shadow:var(--elev-dark); }
-.card-body{ padding:var(--space-6); }
-.card-title{ font-size:var(--fs-h5); font-weight:600; margin-bottom:var(--space-3); }
-
-/* tabela elegante */
-.table{ width:100%; border-collapse:separate; border-spacing:0; background:var(--card); border:1px solid var(--borderC); border-radius:var(--radius); overflow:hidden; }
-.table thead th{ text-align:left; font-weight:600; font-size:var(--fs-sm); color:var(--muted); background:var(--surface); padding:12px 16px; border-bottom:1px solid var(--borderC); position:sticky; top:0; z-index:1; }
-.table tbody td{ padding:14px 16px; border-bottom:1px solid var(--borderC); }
-.table tbody tr:nth-child(odd){ background: color-mix(in oklab, var(--surface) 55%, transparent); }
-@supports not (background: color-mix(in oklab, #000 50%, #fff 50%)){ .table tbody tr:nth-child(odd){ background:var(--surface); } }
-
-/* botões com glow sutil */
-.btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; height:44px; padding:0 16px; border-radius:999px; border:1px solid var(--borderC); background:linear-gradient(180deg, var(--card), color-mix(in oklab, var(--card) 75%, transparent)); transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease; }
-.btn:hover{ transform: translateY(-1px); box-shadow:0 10px 30px rgba(126,58,242,.18), 0 0 0 8px color-mix(in oklab, var(--ring) 55%, transparent); border-color: color-mix(in oklab, var(--accent) 45%, var(--borderC)); }
-.btn:active{ transform: translateY(0); }
-.btn-primary{ background:linear-gradient(180deg, var(--accent), var(--accent-700)); color:white; border-color: transparent; }
-.btn-primary:hover{ box-shadow: 0 12px 36px rgba(126,58,242,.26), 0 0 0 10px color-mix(in oklab, var(--ring-strong) 65%, transparent); }
-
-.topbar-glass{
-  position:sticky; top:0; z-index:40;
-  background: color-mix(in oklab, var(--card) 65%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom:1px solid var(--borderC);
+/* Inputs e cards padrão */
+.input {
+  width:100%; height:44px; border:1px solid var(--border-color);
+  background: color-mix(in oklab, var(--card) 85%, transparent);
+  border-radius: var(--radius-lg); padding: 0 .75rem;
+  transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
 }
+.input::placeholder { color: color-mix(in oklab, var(--text) 45%, transparent); }
+.input:focus { outline: none; box-shadow: 0 0 0 3px var(--ring); border-color: var(--accent); background: var(--card); }
+
+.card {
+  border: 1px solid var(--border-color);
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 30px rgba(2,32,71,.06);
+}
+
+/* botões : já temos componente, mas ajudamos variantes simples em CSS (fallback) */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  height:44px; padding:0 1rem; border-radius: var(--radius-lg);
+  font-weight:600; transition: opacity .2s ease, box-shadow .2s ease, transform .04s ease;
+  border:1px solid var(--border-color);
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary{ background: var(--accent); color:#fff; border-color: transparent; }
+.btn-outline{ background: var(--card); color: var(--text); }
+.btn:hover{ opacity:.95; }
+.btn:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--ring-strong); }

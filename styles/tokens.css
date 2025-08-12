@@ -1,69 +1,45 @@
 :root{
-  /* Brand / Accent (roxo Entourage) */
-  --accent:#7E3AF2; --accent-600:#6C2BD9; --accent-700:#5B21B6;
+  /* Cores (claro) inspiradas na Entourage */
+  --accent:#00A7DD;
+  --bg:#F6F8FB;
+  --card:#FFFFFF;
+  --surface: #FAFBFF;
+  --text:#0B1524;
+  --muted:#667085;
+  --border-color:rgba(16,24,40,0.10);
 
-  /* Light */
-  --bg:#F6F8FB; --card:#FFFFFF; --surface:#F2F4F9;
-  --text:#0B1524; --muted:#667085; --borderC:rgba(16,24,40,.12);
+  /* Tipografia e raios */
+  --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  --font-display: "Sora", var(--font-sans);
+  --radius-lg: 14px;
+  --radius-xl: 18px;
 
-  /* Dark */
-  --bg-dark:#0B1220; --card-dark:#0F1627; --surface-dark:#0C1322;
-  --text-dark:#E6E8EC; --muted-dark:#9BA3AF; --borderC-dark:rgba(255,255,255,.10);
-
-  /* Escalas tipográficas */
-  --fs-xs: 12px;  --fs-sm: 13px;  --fs-base: 14px; --fs-md: 16px;
-  --fs-lg: 18px;  --fs-xl: 20px;  --fs-2xl: 24px; --fs-3xl: 28px; --fs-4xl: 32px;
-
-  /* Espaçamentos (ritmo 4/8/12/16/24/32) */
-  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
-  --space-5:24px; --space-6:32px; --space-7:40px; --space-8:48px;
-
-  /* Raio & sombras */
-  --radius:16px; --radius-lg:22px;
-  --elev:0 10px 30px rgba(2,32,71,.08);
-  --elev-dark:0 14px 36px rgba(0,0,0,.35);
+  /* Efeitos */
+  --ring: #00A7DD33;
+  --ring-strong: #00A7DD66;
 }
+
 :root[data-theme="dark"]{
-  --bg:var(--bg-dark); --card:var(--card-dark); --surface:var(--surface-dark);
-  --text:var(--text-dark); --muted:var(--muted-dark); --borderC:var(--borderC-dark);
+  --accent:#00A7DD;
+  --bg:#0B1220;
+  --card:#111827;
+  --surface:#0E1524;
+  --text:#E6E8EC;
+  --muted:#9BA3AF;
+  --border-color:rgba(255,255,255,0.12);
+  --ring:#00A7DD55;
+  --ring-strong:#00A7DD88;
 }
 
-/* Base */
-html,body{ background:var(--bg); color:var(--text); min-height:100%; }
-body { font-size: var(--fs-base); line-height: 1.5; }
+html,body{ background:var(--bg); color:var(--text); }
+.text-muted{ color:var(--muted); }
+.bg-card{ background:var(--card); }
+.bg-surface{ background:var(--surface); }
+.border{ border:1px solid var(--border-color); }
+.shadow-soft{ box-shadow:0 8px 30px rgba(2,32,71,.08); }
 
-/* Tipografia utilitária */
-.h1{ font-size:var(--fs-4xl); line-height:1.25; font-weight:700; letter-spacing:-0.01em; }
-.h2{ font-size:var(--fs-3xl); line-height:1.28; font-weight:700; letter-spacing:-0.01em; }
-.h3{ font-size:var(--fs-2xl); line-height:1.3; font-weight:600; }
-.subtle{ font-size:var(--fs-sm); color:var(--muted); }
-
-/* Contêiner e respiro */
-.container{ max-width:1280px; margin:0 auto; padding-left:var(--space-5); padding-right:var(--space-5); }
-.section{ padding: var(--space-6) 0; }
-
-/* Cartões e superfícies */
-.card{ background:var(--card); border:1px solid var(--borderC); border-radius:var(--radius); box-shadow:var(--elev); }
-.surface{ background:var(--surface); border:1px solid var(--borderC); border-radius:var(--radius); }
-
-/* Inputs/Buttons baseline (sem visual forte — virá nos próximos) */
-.input{ height:48px; width:100%; border:1px solid var(--borderC); background:var(--surface); border-radius:12px; padding:0 14px; }
-
-/* Glass utilities */
-.glass{
-  background: rgba(255,255,255,.65);
-  -webkit-backdrop-filter: saturate(1.6) blur(12px);
-  backdrop-filter: saturate(1.6) blur(12px);
-  border:1px solid rgba(16,24,40,.10);
-}
-:root[data-theme="dark"] .glass{
-  background: rgba(13,18,32,.55);
-  border-color: rgba(255,255,255,.10);
-}
-
-/* Focus ring acessível */
-.focus-ring:focus-visible{ outline: none; box-shadow: 0 0 0 4px rgba(126,58,242,.35); }
-
-/* Dark solid cards/surfaces */
-:root[data-theme="dark"] .card{ background:#0F1627; border-color:#FFFFFF1A; box-shadow:var(--elev-dark); }
-:root[data-theme="dark"] .surface{ background:#0C1322; border-color:#FFFFFF1A; box-shadow:none; }
+/* Utilitários de layout/anim */
+.container-main{ width:100%; max-width:1280px; margin:0 auto; padding:1.25rem; }
+@media (min-width: 768px){ .container-main{ padding:1.5rem; } }
+@keyframes fadeInUp { from{opacity:.01; transform:translateY(6px)} to{opacity:1; transform:none} }
+.fade-in { animation: fadeInUp .28s ease-out both; }

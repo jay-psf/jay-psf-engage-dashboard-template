@@ -1,3 +1,7 @@
+set -euo pipefail
+echo "== Patch 35: Reescreve ClientShell (remove lixo e corrige render) =="
+
+cat > components/ClientShell.tsx <<'TSX'
 "use client";
 
 import { ReactNode, useEffect } from "react";
@@ -11,7 +15,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
 
   // Aplica o tema conforme preferência/sessão
   useEffect(() => {
-    setThemeAttr(null, role);
+    setThemeAttr(undefined, role);
   }, [role]);
 
   // Sem chrome nas telas de autenticação
@@ -33,3 +37,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
     </>
   );
 }
+TSX
+
+echo "== Build =="
+pnpm build

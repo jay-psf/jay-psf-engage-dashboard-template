@@ -1,93 +1,34 @@
 "use client";
-
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { readSession } from "@/components/lib/session";
+import Link from "next/link";
+import Button from "./Button";
+import { useEffect, useState } from "react";
 
-const navAdmin = [
-  { href: "/admin", label: "Overview" },
-  { href: "/pipeline", label: "Pipeline" },
-  { href: "/projetos", label: "Projetos" },
-  { href: "/settings", label: "Settings" },
-];
-
-function sponsorNav(brand: string){
-  const base = `/sponsor/${brand}`;
-  return [
-    { href: `${base}/overview`, label: "Overview" },
-    { href: `${base}/results`, label: "Resultados" },
-    { href: `${base}/financials`, label: "Financeiro" },
-    { href: `${base}/events`, label: "Eventos" },
-    { href: `${base}/assets`, label: "Assets" },
-    { href: `${base}/settings`, label: "Settings" },
-  ];
-}
+type Session = { role?: "admin"|"sponsor"; brand?: string; username?: string };
+function readSession(): Session { try { const r=localStorage.getItem("session"); return r? JSON.parse(r):{}; } catch { return {}; } }
 
 export default function Topbar(){
-  const pathname = usePathname();
-  const router = useRouter();
-  const { role, brand } = readSession();
-
-  const isSponsor = role === "sponsor" && brand;
-  const items = isSponsor ? sponsorNav(String(brand)) : navAdmin;
-
-  async function logout(){
-    try {
-      await fetch("/api/logout", { method:"POST" });
-    } finally {
-      router.push("/login");
-    }
-  }
-
+  const [s,setS] = useState<Session>({});
+  useEffect(()=>{ setS(readSession()); },[]);
+  const isSponsor = s.role==="sponsor";
+  const brand = s.brand || "heineken";
   return (
-    <header className="glass sticky top-0 z-40">
-      <div className="container" style={{display:"flex",alignItems:"center",gap:16,height:64}}>
-        {/* Logo Engage (clique -> home) */}
-        <Link href="/" aria-label="Ir para Home" className="focus-ring" style={{display:"flex",alignItems:"center",gap:10}}>
-          <Image src="/engage-logo.svg" alt="Engage" width={28} height={28} priority />
-          <span className="h3" style={{fontSize:"18px"}}>Engage</span>
-        </Link>
-
-        {/* Nav */}
-        <nav style={{display:"flex",gap:8,marginLeft:16,flex:1,alignItems:"center"}}>
-          {items.map(item=>{
-            const active = pathname.startsWith(item.href);
-            return (
-              <Link key={item.href} href={item.href}
-                className={"focus-ring"}
-                style={{
-                  padding:"8px 12px",
-                  borderRadius:12,
-                  border: active ? "1px solid var(--borderC)" : "1px solid transparent",
-                  background: active ? "var(--surface)" : "transparent",
-                  fontSize:"14px"
-                }}>
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Logo do sponsor (se houver) -> perfil overview */}
-        {isSponsor && (
-          <Link href={`/sponsor/${brand}/overview`} aria-label="Perfil do patrocinador"
-                className="focus-ring" style={{display:"flex",alignItems:"center"}}>
-            <div style={{
-              width:48,height:48, borderRadius:12, overflow:"hidden",
-              border:"1px solid var(--borderC)", background:"var(--card)"
-            }}>
-              <Image src={`/logos/${String(brand).toLowerCase()}.png`} alt={String(brand)}
-                     width={96} height={96} style={{width:"100%",height:"100%",objectFit:"contain"}} />
-            </div>
-          </Link>
-        )}
-
-        {/* Sair */}
-        <button onClick={logout} className="focus-ring"
-                style={{marginLeft:12,padding:"10px 14px",borderRadius:12,border:"1px solid var(--borderC)",background:"var(--card)"}}>
-          Sair
-        </button>
+    <header className="sticky top-0 z-30 border bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+      <div className="container-main h-16 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {isSponsor ? (
+            <Image src={`/logos/${brand}.png`} alt={`${brand} logo`} width={120} height={28} className="object-contain" priority />
+          ) : (
+            <Link href="/" className="h-display text-lg">Entourage • Engage</Link>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={()=>{
+            localStorage.removeItem("session");
+            document.documentElement.removeAttribute("data-theme");
+            window.location.href="/login";
+          }}>Sair</Button>
+        </div>
       </div>
     </header>
   );

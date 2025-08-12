@@ -2,32 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-  :root{ color-scheme: light dark; }
-  html, body, #__next{ height:100%; }
-  body{ @apply bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200; }
+/* App background + tipografia base */
+html,body{height:100%;}
+body{
+  background: radial-gradient(1200px 800px at 20% -10%, #0b1635 0%, rgba(11,22,53,0) 60%) , var(--bg);
+  color: var(--text);
 }
 
-@layer components{
-  .card{
-    @apply bg-white dark:bg-neutral-800 rounded-2xl p-4 md:p-6 border border-neutral-200/60 dark:border-neutral-700/60;
-    box-shadow: var(--shadow-soft);
-  }
-  .kpi-title{ @apply text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400; }
-  .kpi-value{ @apply text-2xl md:text-3xl font-semibold; }
-  .chip{
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs;
-  }
-  .chip--success{ @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300; }
-  .chip--warning{ @apply bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300; }
-  .chip--danger{ @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300; }
-  .btn{
-    @apply inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-neutral-300/60 dark:border-neutral-700/60 hover:bg-neutral-100 dark:hover:bg-neutral-800;
-  }
-  .sidebar-link{
-    @apply flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800;
-  }
-  .topbar{
-    @apply sticky top-0 z-40 backdrop-blur bg-white/70 dark:bg-neutral-900/60 border-b border-neutral-200/60 dark:border-neutral-800/60;
-  }
+/* cartões padrão */
+.card{
+  @apply rounded-2xl border shadow-sm transition;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border-color: var(--border);
+}
+.card:hover{ background: var(--card-hover); }
+
+/* botões principais */
+.btn-primary{
+  @apply inline-flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition;
+  color: white;
+  background: linear-gradient(180deg, var(--brand-accent) 0%, var(--brand-accent-600) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.btn-primary:hover{ filter: brightness(1.05); }
+
+/* campos */
+.input{
+  @apply w-full rounded-lg border px-3 py-2 bg-transparent outline-none;
+  border-color: var(--border);
+}
+.input:focus{
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
+  border-color: var(--ring);
+}
+
+/* barra sutil */
+.hr{
+  height:1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
 }

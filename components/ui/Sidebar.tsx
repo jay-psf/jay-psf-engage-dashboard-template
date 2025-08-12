@@ -1,22 +1,40 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function Sidebar() {
-  const item = (href: string, label: string) => (
+const NavItem = ({ href, label }: { href: string; label: string }) => {
+  const pathname = usePathname();
+  const active = pathname === href;
+  return (
     <Link
       href={href}
-      className="block px-3 py-2 rounded-lg hover:bg-neutral-200 transition"
+      className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition
+        ${active ? "bg-white/10 border-white/20" : "border-white/10 hover:bg-white/5"}`}
     >
-      {label}
+      <div className="size-2 rounded-full bg-[var(--brand-accent)]" />
+      <span>{label}</span>
     </Link>
   );
+};
 
+export default function Sidebar() {
   return (
-    <aside className="w-64 shrink-0 border-r bg-white p-4 space-y-2">
-      <h2 className="font-semibold mb-2">Menu</h2>
-      {item("/", "Dashboard")}
-      {item("/pipeline", "Pipeline")}
-      {item("/projetos", "Projetos")}
-      {item("/admin", "Admin")}
+    <aside className="w-64 shrink-0 p-4 hidden md:block">
+      <div className="card p-4 shadow-soft">
+        <div className="text-sm text-muted mb-2">Navegação</div>
+        <div className="grid gap-2">
+          <NavItem href="/" label="Dashboard" />
+          <NavItem href="/pipeline" label="Pipeline" />
+          <NavItem href="/projetos" label="Projetos" />
+          <NavItem href="/admin" label="Admin" />
+        </div>
+        <div className="hr my-4" />
+        <div className="text-sm text-muted">Acesso Patrocinador</div>
+        <div className="mt-2 grid gap-2">
+          <NavItem href="/sponsor/acme/overview" label="Overview" />
+          <NavItem href="/sponsor/acme/results" label="Resultados" />
+        </div>
+      </div>
     </aside>
   );
 }

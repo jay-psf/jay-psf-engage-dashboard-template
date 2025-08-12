@@ -6,9 +6,9 @@ export const metadata = { title: "Engage" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body><div className="container">
+      <body>
         <ClientShell>{children}</ClientShell>
-      </div></body>
+      </body>
     </html>
   );
 }

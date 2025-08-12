@@ -1,3 +1,10 @@
+set -euo pipefail
+echo "== Patch 40: Topbar unificado (glass) + Image otimizado =="
+
+mkdir -p components/ui
+
+# 1) Topbar client com glass, next/image e menus por papel
+cat > components/ui/Topbar.tsx <<'TSX'
 "use client";
 
 import Link from "next/link";
@@ -92,3 +99,30 @@ export default function Topbar(){
     </header>
   );
 }
+TSX
+
+# 2) Garante que o app use o Topbar (sem duplicidades) e tenha respiro sob o header
+if [ -f components/ClientShell.tsx ]; then
+  cp components/ClientShell.tsx components/ClientShell.tsx.bak40 || true
+  # Remove qualquer topbar antigo e injeta o novo
+  awk '
+  BEGIN{t=0}
+  /<Topbar/ {t=1}
+  { if(t==0) print }
+  END{}
+  ' components/ClientShell.tsx > components/ClientShell.tmp || true
+  mv components/ClientShell.tmp components/ClientShell.tsx
+
+  # Reinsere Topbar único no topo do ClientShell
+  if ! grep -q "import Topbar from \"@/components/ui/Topbar\"" components/ClientShell.tsx; then
+    sed -i '1i "use client";\nimport Topbar from "@/components/ui/Topbar";' components/ClientShell.tsx
+  fi
+  if ! grep -q "<Topbar />" components/ClientShell.tsx; then
+    sed -i 's#return (#[[RETURN]]#' components/ClientShell.tsx
+    sed -i 's#[[RETURN]]#return (<><Topbar />#' components/ClientShell.tsx
+    sed -i 's#</main>#</main></>#' components/ClientShell.tsx
+  fi
+fi
+
+echo "== Build =="
+pnpm build

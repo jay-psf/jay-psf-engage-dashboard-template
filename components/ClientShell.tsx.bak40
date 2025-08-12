@@ -21,5 +21,10 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   }, [role]);
 
   const isLogin = pathname === "/login";
-  [[RETURreturn (<><Topbar />]
+  return (
     <>
+      {!isLogin && <Topbar />}
+      <main className={isLogin ? "" : "pt-[72px]"}>{children}</main>
+    </>
+  );
+}

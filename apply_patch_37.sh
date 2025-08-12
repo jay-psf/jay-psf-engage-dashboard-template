@@ -1,3 +1,10 @@
+set -euo pipefail
+echo "== Patch 37: Tipografia + Espaçamento + Container =="
+
+mkdir -p styles
+
+# 1) Tokens de design: tipografia e spacing
+cat > styles/tokens.css <<'CSS'
 :root{
   /* Brand / Accent (roxo Entourage) */
   --accent:#7E3AF2; --accent-600:#6C2BD9; --accent-700:#5B21B6;
@@ -48,22 +55,28 @@ body { font-size: var(--fs-base); line-height: 1.5; }
 
 /* Inputs/Buttons baseline (sem visual forte — virá nos próximos) */
 .input{ height:48px; width:100%; border:1px solid var(--borderC); background:var(--surface); border-radius:12px; padding:0 14px; }
+CSS
 
-/* Glass utilities */
-.glass{
-  background: rgba(255,255,255,.65);
-  -webkit-backdrop-filter: saturate(1.6) blur(12px);
-  backdrop-filter: saturate(1.6) blur(12px);
-  border:1px solid rgba(16,24,40,.10);
-}
-:root[data-theme="dark"] .glass{
-  background: rgba(13,18,32,.55);
-  border-color: rgba(255,255,255,.10);
-}
+# 2) Garante import dos tokens no globals
+mkdir -p styles
+if [ ! -f styles/globals.css ]; then
+  cat > styles/globals.css <<'CSS'
+@import "./tokens.css";
+* { box-sizing: border-box; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; height: auto; display: block; }
+CSS
+fi
 
-/* Focus ring acessível */
-.focus-ring:focus-visible{ outline: none; box-shadow: 0 0 0 4px rgba(126,58,242,.35); }
+# 3) Aplica container e respiro no layout principal (sem quebrar nada)
+if [ -f app/layout.tsx ]; then
+  cp app/layout.tsx app/layout.tsx.bak37 || true
+  # insere uma wrapper .container no <body> se ainda não houver
+  if ! grep -q 'className="container"' app/layout.tsx; then
+    sed -i 's/<body\(.*\)>/<body\1><div className="container">/' app/layout.tsx
+    sed -i 's#</body>#</div></body>#' app/layout.tsx
+  fi
+fi
 
-/* Dark solid cards/surfaces */
-:root[data-theme="dark"] .card{ background:#0F1627; border-color:#FFFFFF1A; box-shadow:var(--elev-dark); }
-:root[data-theme="dark"] .surface{ background:#0C1322; border-color:#FFFFFF1A; box-shadow:none; }
+echo "== Build =="
+pnpm build

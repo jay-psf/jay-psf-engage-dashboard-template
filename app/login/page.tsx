@@ -1,80 +1,70 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import RoleSwitch from "@/components/ui/RoleSwitch";
 import Button from "@/components/ui/Button";
 
-type Role = "admin" | "sponsor";
-
-export default function Page(){
-  const [role, setRole] = useState<Role>("admin");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginPage(){
+  const [role, setRole] = useState<"admin"|"sponsor">("admin");
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
 
-  useEffect(()=>{ setUsername("admin"); setPassword("123456"); },[]);
+  useEffect(()=>{
+    if(role==="admin"){ setUsername("admin"); setPassword("123456"); }
+    else { setUsername("sponsor"); setPassword("000000"); }
+  },[role]);
 
-  function brandFromUser(u:string){ return u.toLowerCase()==="sponsor" ? "heineken" : "acme"; }
-
-  async function onSubmit(e:React.FormEvent){
-    e.preventDefault();
-    const ok =
-      (role==="admin" && username==="admin" && password==="123456") ||
-      (role==="sponsor" && username==="sponsor" && password==="000000");
-    if(!ok){ alert("Usuário ou senha inválidos"); return; }
-
-    setLoading(true);
-    const brand = role==="sponsor" ? brandFromUser(username) : undefined;
-    const resp = await fetch("/api/auth", {
-      method:"POST",
-      headers:{ "content-type":"application/json" },
-      body: JSON.stringify({ role, brand })
-    });
-    setLoading(false);
-    if(!resp.ok){ alert("Falha ao autenticar"); return; }
-
-    if(role==="sponsor") window.location.href = `/sponsor/${brand}/overview`;
-    else window.location.href = "/";
+  async function submit(e:React.FormEvent){
+    e.preventDefault(); setLoading(true);
+    try{
+      const r = await fetch("/api/auth",{ method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ username, password, role })});
+      if(r.ok){
+        if(role==="admin") window.location.href="/admin";
+        else window.location.href="/sponsor/heineken/overview";
+      } else {
+        alert("Usuário ou senha inválidos.");
+      }
+    } finally{ setLoading(false); }
   }
 
   return (
-    <main className="w-full max-w-4xl">
-      <div className="grid md:grid-cols-2 gap-4 mb-6">
-        <button type="button" onClick={()=>{ setRole("admin"); setUsername("admin"); setPassword("123456"); }}
-          className={`text-left rounded-2xl border px-5 py-4 bg-card hover:shadow-soft transition ${role==="admin"?"ring-2 ring-[var(--accent)]":""}`}>
-          <div className="text-sm text-muted">Perfil</div>
-          <div className="mt-1 font-semibold">Interno (Admin)</div>
-          <div className="text-sm text-muted mt-1">Acesso completo</div>
-        </button>
-
-        <button type="button" onClick={()=>{ setRole("sponsor"); setUsername("sponsor"); setPassword("000000"); }}
-          className={`text-left rounded-2xl border px-5 py-4 bg-card hover:shadow-soft transition ${role==="sponsor"?"ring-2 ring-[var(--accent)]":""}`}>
-          <div className="text-sm text-muted">Perfil</div>
-          <div className="mt-1 font-semibold">Patrocinador</div>
-          <div className="text-sm text-muted mt-1">Acesso ao próprio contrato</div>
-        </button>
+    <div className="min-h-[calc(100vh-40px)] grid place-items-center px-4">
+      <div className="card w-full max-w-xl p-8">
+        <div className="flex flex-col items-center gap-6">
+          <h1 className="text-2xl font-semibold">Entrar</h1>
+          <RoleSwitch value={role} onChange={setRole} />
+          <form onSubmit={submit} className="w-full mt-4 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm mb-1 text-[var(--muted)]">Usuário</label>
+                <input
+                  value={username} onChange={e=>setUsername(e.target.value)}
+                  className="pill w-full h-11 px-3 bg-[var(--surface)]"
+                  autoComplete="username"
+                />
+              </div>
+              <div>
+                <label className="block text-sm mb-1 text-[var(--muted)]">Senha</label>
+                <input
+                  type="password"
+                  value={password} onChange={e=>setPassword(e.target.value)}
+                  className="pill w-full h-11 px-3 bg-[var(--surface)]"
+                  autoComplete="current-password"
+                />
+              </div>
+            </div>
+            <div className="pt-2 flex gap-3 justify-center">
+              <Button type="submit" size="lg" className="lumen">
+                {loading ? "Entrando..." : "Entrar"}
+              </Button>
+              <Button type="button" variant="outline"
+                onClick={()=>{ if(role==="admin"){ setUsername("admin"); setPassword("123456"); } else { setUsername("sponsor"); setPassword("000000"); }}}>
+                Preencher exemplo
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
-
-      <form onSubmit={onSubmit} className="card p-6 shadow-soft space-y-4">
-        <div className="grid md:grid-cols-2 gap-4">
-          <label className="block">
-            <div className="text-sm mb-1">Usuário</div>
-            <input className="input" value={username} onChange={(e)=>setUsername(e.target.value)}
-              placeholder={role==="admin"?"admin":"sponsor"} />
-          </label>
-          <label className="block">
-            <div className="text-sm mb-1">Senha</div>
-            <input className="input" type="password" value={password} onChange={(e)=>setPassword(e.target.value)}
-              placeholder={role==="admin"?"123456":"000000"} />
-          </label>
-        </div>
-
-        <div className="flex gap-3 pt-2">
-          <Button type="submit" size="lg">{loading ? "Entrando..." : "Entrar"}</Button>
-          <Button type="button" variant="outline" onClick={()=>{
-            if(role==="admin"){ setUsername("admin"); setPassword("123456"); }
-            else { setUsername("sponsor"); setPassword("000000"); }
-          }}>Preencher exemplo</Button>
-        </div>
-      </form>
-    </main>
+    </div>
   );
 }

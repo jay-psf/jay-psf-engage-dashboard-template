@@ -7,7 +7,7 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export default function Button({ variant="primary", size="md", className, ...rest }: Props){
-  const base = "btn glow-hover pressable";
+  const base = "btn";
   const v = variant === "primary" ? "btn-primary" : "btn-outline";
   const s =
     size === "sm" ? "h-9 px-3 text-sm" :

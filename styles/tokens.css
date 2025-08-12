@@ -1,11 +1,28 @@
-:root{
-  /* ===== Brand ===== */
-  --brand-primary: #0F172A;     /* ajuste depois com a cor da Entourage */
-  --brand-primary-600:#111827;
-  --brand-accent:  #06B6D4;
-  --brand-accent-600:#0891B2;
+/* Tema padrão = admin (claro). Sponsor (escuro) abaixo */
+:root,
+.theme-admin {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --ring: #2563eb;
 
-  /* ===== UI Base ===== */
+  --brand-primary: #0f172a;
+  --brand-primary-600: #111827;
+  --brand-accent: #0ea5e9;
+  --brand-accent-600: #0284c7;
+
+  --card: #ffffff;
+  --card-hover: #f1f5f9;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+/* Tema sponsor = escuro */
+.theme-sponsor {
   --bg: #0B0F19;
   --panel: #0F1424;
   --panel-2: #121938;
@@ -14,7 +31,11 @@
   --border: #1F2A44;
   --ring: #38BDF8;
 
-  /* ===== Cards & states ===== */
+  --brand-primary: #0F172A;
+  --brand-primary-600:#111827;
+  --brand-accent:  #06B6D4;
+  --brand-accent-600:#0891B2;
+
   --card: #0E1224;
   --card-hover: #151C3A;
   --success: #10B981;

@@ -9,9 +9,11 @@ const NavItem = ({ href, label }: { href: string; label: string }) => {
     <Link
       href={href}
       className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition
-        ${active ? "bg-white/10 border-white/20" : "border-white/10 hover:bg-white/5"}`}
+        ${active ? "bg-black/5 dark:bg-white/10" : "hover:bg-black/5"}`
+      }
+      style={{borderColor:"var(--border)"}}
     >
-      <div className="size-2 rounded-full bg-[var(--brand-accent)]" />
+      <div className="size-2 rounded-full" style={{background:"var(--brand-accent)"}} />
       <span>{label}</span>
     </Link>
   );
@@ -20,16 +22,16 @@ const NavItem = ({ href, label }: { href: string; label: string }) => {
 export default function Sidebar() {
   return (
     <aside className="w-64 shrink-0 p-4 hidden md:block">
-      <div className="card p-4 shadow-soft">
-        <div className="text-sm text-muted mb-2">Navegação</div>
-        <div className="grid gap-2">
+      <div className="card p-4">
+        <div className="text-sm" style={{color:"var(--muted)"}}>Navegação</div>
+        <div className="grid gap-2 mt-2">
           <NavItem href="/" label="Dashboard" />
           <NavItem href="/pipeline" label="Pipeline" />
           <NavItem href="/projetos" label="Projetos" />
           <NavItem href="/admin" label="Admin" />
         </div>
         <div className="hr my-4" />
-        <div className="text-sm text-muted">Acesso Patrocinador</div>
+        <div className="text-sm" style={{color:"var(--muted)"}}>Acesso Patrocinador</div>
         <div className="mt-2 grid gap-2">
           <NavItem href="/sponsor/acme/overview" label="Overview" />
           <NavItem href="/sponsor/acme/results" label="Resultados" />

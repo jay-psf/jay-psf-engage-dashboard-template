@@ -3,45 +3,39 @@ import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
-  // Sempre permitir login/auth/logout e estáticos
+  // Libera estáticos e páginas públicas
   if (
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/api/logout") ||
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/static") ||
-    pathname === "/denied"
+    pathname.startsWith("/public") ||
+    pathname === "/login" ||
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/logout")
   ) {
     return NextResponse.next();
   }
 
-  const role = req.cookies.get("engage_role")?.value;
+  const role = req.cookies.get("role")?.value;
 
-  // Rotas patrocinador
-  if (pathname.startsWith("/sponsor/")) {
+  // Rotas sponsor exigem role sponsor
+  if (pathname.startsWith("/sponsor")) {
     if (role !== "sponsor") {
-      return NextResponse.redirect(new URL("/denied", req.url));
+      const url = req.nextUrl.clone();
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
     }
     return NextResponse.next();
   }
 
-  // Rotas internas (exigem admin)
-  const internalPrefixes = ["/", "/pipeline", "/projetos", "/admin"];
-  const isInternal = internalPrefixes.some((p) =>
-    pathname === p || pathname.startsWith(p + "/")
-  );
-  if (isInternal) {
-    if (role !== "admin") {
-      return NextResponse.redirect(new URL("/denied", req.url));
-    }
-    return NextResponse.next();
+  // Outras rotas (dashboard interno) exigem admin
+  if (!role || role !== "admin") {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
   }
 
-  // fallback
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!favicon.ico).*)"],
+  matcher: ["/((?!_next|public).*)"],
 };

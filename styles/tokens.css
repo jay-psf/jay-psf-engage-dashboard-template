@@ -1,28 +1,32 @@
 :root{
   /* Light (admin) */
   --accent:#00A7DD;
-  --bg:#F6F8FB;
+  --accent-ink:#03212B;
+  --bg:#F3F6FA;            /* levemente azulada p/ contraste */
   --card:#FFFFFF;
-  --surface:#F9FBFF;
-  --text:#0B1524;
-  --muted:#667085;
-  --borderC:rgba(16,24,40,0.10);
+  --surface:#F7FAFF;       /* topo/controles */
+  --text:#0A1322;
+  --muted:#5F6B7A;
+  --borderC:rgba(15,23,42,.14);
   --ring:rgba(0,167,221,.35);
+  --shadow:0 10px 30px rgba(2,32,71,.08);
+
   --radius:16px;
   --radius-lg:20px;
-  --elev:0 10px 30px rgba(2,32,71,.08);
 }
+
 :root[data-theme="dark"]{
   /* Dark (sponsor) */
   --accent:#00A7DD;
-  --bg:#0B1220;
-  --card:#0F1627;
-  --surface:#0C1322;
-  --text:#E6E8EC;
-  --muted:#9BA3AF;
-  --borderC:rgba(255,255,255,0.10);
-  --ring:rgba(0,167,221,.50);
-  --elev:0 14px 36px rgba(0,0,0,.35);
+  --accent-ink:#02141B;
+  --bg:#0A111C;           /* fundo “navy” */
+  --card:#0F1726;         /* cards */
+  --surface:#0B1422;      /* appbar/menus */
+  --text:#E7EAF0;
+  --muted:#A4ADBA;
+  --borderC:rgba(255,255,255,.12);
+  --ring:rgba(0,167,221,.55);
+  --shadow:0 14px 36px rgba(0,0,0,.35);
 }
 
 /* Base */
@@ -36,14 +40,15 @@ html,body{background:var(--bg);color:var(--text)}
 .border-border{border-color:var(--borderC)}
 .rounded-xl{border-radius:var(--radius)}
 .rounded-2xl{border-radius:var(--radius-lg)}
-.shadow-soft{box-shadow:var(--elev)}
+.shadow-soft{box-shadow:var(--shadow)}
 
-/* Inputs util */
+/* Inputs */
 .input{
   height:44px;width:100%;
   border:1px solid var(--borderC);
   background:var(--surface);
   padding:0 12px;border-radius:12px;
-  outline:none;transition:box-shadow .15s ease, border-color .15s ease;
+  outline:none;transition:box-shadow .15s ease,border-color .15s ease,background .15s;
 }
-.input:focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--accent)}
+.input::placeholder{color:var(--muted)}
+.input:focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--accent);background:var(--card)}

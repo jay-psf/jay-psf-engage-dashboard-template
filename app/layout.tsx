@@ -1,28 +1,22 @@
-import "../styles/globals.css";
-import type { Metadata } from "next";
+import "./styles/globals.css";
+import "./styles/tokens.css";
 import { cookies } from "next/headers";
-import Sidebar from "@/components/ui/Sidebar";
-import Topbar from "@/components/ui/Topbar";
+import ClientShell from "@/components/ClientShell";
+import type { Role } from "@/components/lib/types";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Engage Dashboard",
   description: "Patrocínios & Ativações",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }){
-  const c = cookies();
-  const role = (c.get("role")?.value === "sponsor" ? "sponsor" : "admin") as "admin"|"sponsor";
-  const brand = c.get("brand")?.value;
-  const theme = role === "sponsor" ? "dark" : undefined;
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const role = (cookies().get("role")?.value as Role | undefined) ?? undefined;
+  const brand = cookies().get("brand")?.value;
 
   return (
-    <html lang="pt-BR" data-theme={theme}>
-      <body>
-        <Topbar role={role} brand={brand} />
-        <div className="mx-auto grid max-w-screen-2xl grid-cols-[260px,1fr] gap-6 p-6">
-          <Sidebar role={role} />
-          <main className="min-h-[70vh]">{children}</main>
-        </div>
+    <html lang="pt-BR">
+      <body className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+        <ClientShell role={role} brand={brand}>{children}</ClientShell>
       </body>
     </html>
   );

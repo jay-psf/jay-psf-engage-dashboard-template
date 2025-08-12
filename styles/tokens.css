@@ -70,3 +70,12 @@ html,body{background:var(--bg);color:var(--text);}
   box-shadow:none;
 }
 .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Inputs util */
+.input {
+  height: 44px;
+  width: 100%;
+  border: 1px solid var(--borderC, rgba(16,24,40,0.10));
+  background: var(--surface, #F9FBFF);
+  padding: 0 12px;
+}

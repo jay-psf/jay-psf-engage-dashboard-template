@@ -1,9 +1,20 @@
 "use client";
-import { readCookie } from "@/components/lib/session";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { readSession } from "@/components/lib/session";
 
 export default function Topbar() {
-  const role = typeof document !== "undefined" ? readCookie("role") : undefined;
-  const brand = typeof document !== "undefined" ? readCookie("brand") : undefined;
+  const [{ role, brand }, setSession] = useState<{role?: "admin"|"sponsor"; brand?: string}>({});
+
+  useEffect(() => {
+    setSession(readSession());
+  }, []);
+
+  function toggleSidebar() {
+    const html = document.documentElement;
+    const cur = html.getAttribute("data-sidebar");
+    html.setAttribute("data-sidebar", cur === "open" ? "closed" : "open");
+  }
 
   async function logout() {
     await fetch("/api/logout", { method: "POST" });
@@ -11,29 +22,39 @@ export default function Topbar() {
   }
 
   return (
-    <header className="sticky top-0 z-30 bg-[var(--bg)]/90 backdrop-blur-lg border-b border-border">
-      <div className="mx-auto max-w-screen-2xl flex items-center justify-between gap-4 px-6 py-3">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 grid place-items-center rounded-xl bg-[var(--surface)] border border-border font-semibold">E</div>
-          <span className="font-semibold">Engage</span>
-        </div>
+    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur border-b border-border">
+      <div className="mx-auto max-w-screen-2xl px-4 py-3 flex items-center gap-3">
+        {/* Hamburger mobile */}
+        <button
+          aria-label="Abrir menu"
+          onClick={toggleSidebar}
+          className="md:hidden inline-flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2"
+        >
+          <span style={{width:20,height:2,background:"currentColor",display:"block",borderRadius:2}} />
+          <span style={{width:20,height:2,background:"currentColor",display:"block",borderRadius:2,marginTop:3}} />
+          <span style={{width:20,height:2,background:"currentColor",display:"block",borderRadius:2,marginTop:3}} />
+        </button>
 
-        <div className="flex items-center gap-3">
-          {role === "sponsor" && (
-            <div className="flex items-center gap-2 rounded-full border border-border bg-[var(--surface)] px-3 py-1.5">
-              <img
-                src="/logos/heineken.png"
-                alt={brand ?? "brand"}
-                width={20}
-                height={20}
-                className="block rounded-md"
-              />
-              <span className="text-sm font-medium capitalize">{brand}</span>
-            </div>
-          )}
+        <Link href="/" className="mr-auto font-semibold">Engage</Link>
 
-          <button onClick={logout} className="btn btn-outline">Sair</button>
-        </div>
+        {/* Pílula com apenas o logo do brand (se sponsor) */}
+        {role === "sponsor" && (
+          <div className="rounded-2xl border border-border bg-card px-3 py-1.5 flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/logos/${brand ?? "acme"}.png`}
+              alt={brand ?? "brand"}
+              width={22}
+              height={22}
+              className="brand-logo"
+              style={{ borderRadius: 6, display: "block" }}
+            />
+          </div>
+        )}
+
+        <button onClick={logout} className="ml-2 rounded-xl border border-border bg-card px-4 py-2">
+          Sair
+        </button>
       </div>
     </header>
   );

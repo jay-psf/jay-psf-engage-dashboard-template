@@ -1,41 +1,16 @@
 "use client";
+import { ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
 
-export default function Button({
-  children,
-  size = "md",
-  variant = "primary",
-  className,
-  ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  size?: "sm" | "md" | "lg";
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "outline";
-}) {
-  const sizes = {
-    sm: "h-9 px-3 text-xs",
-    md: "h-10 px-4 text-sm",
-    lg: "h-11 px-5 text-sm",
-  }[size];
-
-  const variants = {
-    primary:
-      "bg-[var(--accent)] text-white border border-[var(--accent-600)] hover:shadow-soft",
-    outline:
-      "bg-transparent text-[var(--text)] border border-border hover:shadow-soft",
-  }[variant];
-
-  return (
-    <button
-      className={clsx(
-        "rounded-full transition focus-visible:outline-none focus-visible:ring-4",
-        "focus-visible:ring-[var(--ring)]",
-        sizes,
-        variants,
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
+  size?: "md" | "lg";
+};
+export default function Button({ className, variant="primary", size="md", ...rest }: Props) {
+  const base = "inline-flex items-center justify-center rounded-2xl font-medium transition focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--ring)]";
+  const sizes = size==="lg" ? "h-11 px-6 text-sm" : "h-10 px-4 text-sm";
+  const styles = variant==="primary"
+    ? "bg-[var(--accent)] text-white hover:bg-[var(--accent-600)] active:bg-[var(--accent-700)] shadow-soft"
+    : "border border-[var(--borderC)] bg-[var(--surface)]/30 text-[var(--text)] hover:bg-[var(--surface)]/60";
+  return <button className={clsx(base, sizes, styles, className)} {...rest} />;
 }

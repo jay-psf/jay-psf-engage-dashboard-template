@@ -1,0 +1,141 @@
+set -euo pipefail
+
+echo "== Patch 13: polimento visual, microanimações e KPIs =="
+
+# 1) Cria CSS de UX (animações, card, KPIs)
+mkdir -p styles
+cat > styles/ux.css <<'CSS'
+/* ===== Microinterações e componentes visuais reutilizáveis ===== */
+
+/* Respeita pessoas com redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Animações leves */
+@keyframes rise {
+  from { transform: translateY(2px); opacity: .96; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+/* Cartão padrão com elevação sutil e hover "3D" */
+.card {
+  background: var(--card);
+  border: 1px solid var(--borderC);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: var(--shadow-soft);
+  padding: 16px;
+  animation: fadeIn .25s ease, rise .25s ease;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+  will-change: transform, box-shadow;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-elev);
+}
+.card:active {
+  transform: translateY(0);
+}
+.card > h3, .card > h4 {
+  letter-spacing: .01em;
+}
+
+/* KPI compacta (usa .card como base) */
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--borderC);
+  border-radius: var(--radius-lg, 16px);
+  padding: 16px;
+  display: grid;
+  gap: 6px;
+  animation: fadeIn .25s ease, rise .25s ease;
+}
+.kpi .kpi-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.kpi .kpi-value {
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.kpi .kpi-trend {
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 4px 8px;
+  border: 1px solid var(--borderC);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+:root[data-theme="dark"] .kpi .kpi-trend {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Botões base (fallback caso o componente Button não esteja em uso) */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .625rem 1rem;
+  border-radius: var(--radius, 12px);
+  border: 1px solid var(--borderC);
+  background: var(--card);
+  transition: transform .1s ease, box-shadow .1s ease, background .1s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+.btn:active { transform: translateY(0); }
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  border-color: transparent;
+}
+.btn-outline {
+  background: transparent;
+}
+
+/* Grid utilitária para KPIs */
+.kpi-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+}
+@media (max-width: 1023px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 639px)  { .kpi-grid { grid-template-columns: 1fr; } }
+
+/* Dark 100% escuro para qualquer elemento de conteúdo */
+:root[data-theme="dark"] .bg-card,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .kpi {
+  background: var(--card); /* já é totalmente escuro via tokens */
+}
+CSS
+
+# 2) Garante import do ux.css no globals.css
+if ! grep -q 'styles/ux.css' styles/globals.css 2>/dev/null; then
+  sed -i.bak '1i @import "./ux.css";' styles/globals.css || true
+  rm -f styles/globals.css.bak
+fi
+
+# 3) Converte cartões existentes para .card (admin e sponsor)
+#    Troca classe base "rounded-2xl border bg-card" por "card"
+for f in $(git ls-files '*.tsx' | tr '\n' ' '); do
+  sed -i.bak 's/className="rounded-2xl border bg-card/className="card/g' "$f" || true
+  sed -i.bak 's/className={`rounded-2xl border bg-card/className={`card/g' "$f" || true
+  sed -i.bak 's/className={"rounded-2xl border bg-card/className={"card/g' "$f" || true
+  rm -f "$f.bak"
+done
+
+# 4) Exemplo opcional de CSS para badges de ganho/perda — não intrusivo
+grep -q '.badge-pos' styles/ux.css || cat >> styles/ux.css <<'CSS'
+.badge-pos { color: #10B981; }
+.badge-neg { color: #EF4444; }
+CSS
+
+echo "== Build =="
+pnpm build
+
+echo "== Patch 13 aplicado com sucesso ✅ =="

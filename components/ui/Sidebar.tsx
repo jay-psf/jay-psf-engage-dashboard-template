@@ -1,54 +1,75 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { readSession } from "@/components/lib/session";
 
-function Item({ href, label }: { href: string; label: string }) {
-  const pathname = usePathname();
-  const active = pathname === href;
+function NavItem({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
-      className={`block rounded-2xl border px-4 py-3 text-sm transition ${
-        active ? "bg-accent text-white border-accent" : "bg-card border-border hover:shadow-soft"
-      }`}
+      className="block rounded-2xl border border-border bg-card px-4 py-3 transition hover:shadow-soft"
+      onClick={() => document.documentElement.setAttribute("data-sidebar", "closed")}
     >
-      {label}
+      {children}
     </Link>
   );
 }
 
 export default function Sidebar() {
-  const { role, brand } = readSession();
+  const [{ role, brand }, setSession] = useState<{role?: "admin"|"sponsor"; brand?: string}>({});
 
-  if (!role) return null; // não aparece enquanto não loga
-
-  const sponsorBase = `/sponsor/${brand ?? "acme"}`;
-
-  const items =
-    role === "sponsor"
-      ? [
-          { href: `${sponsorBase}/overview`, label: "Overview" },
-          { href: `${sponsorBase}/results`, label: "Resultados" },
-          { href: `${sponsorBase}/financials`, label: "Financeiro" },
-          { href: `${sponsorBase}/events`, label: "Eventos" },
-          { href: `${sponsorBase}/assets`, label: "Assets" },
-          { href: `/settings`, label: "Settings" },
-        ]
-      : [
-          { href: "/", label: "Overview" },
-          { href: "/projetos", label: "Resultados" },
-          { href: "/pipeline", label: "Financeiro" },
-          { href: "/settings", label: "Settings" },
-        ];
+  useEffect(() => {
+    setSession(readSession());
+  }, []);
 
   return (
-    <aside className="hidden md:block">
-      <nav className="flex w-[260px] flex-col gap-4">
-        {items.map((i) => (
-          <Item key={i.href} href={i.href} label={i.label} />
-        ))}
-      </nav>
-    </aside>
+    <>
+      {/* Scrim mobile */}
+      <div className="SidebarScrim md:hidden" onClick={() => document.documentElement.setAttribute("data-sidebar", "closed")} />
+
+      {/* Drawer mobile */}
+      <aside className="SidebarMobile md:hidden p-4 space-y-3 border border-border">
+        {role === "sponsor" ? (
+          <>
+            <NavItem href={`/sponsor/${brand}/overview`}>Overview</NavItem>
+            <NavItem href={`/sponsor/${brand}/results`}>Resultados</NavItem>
+            <NavItem href={`/sponsor/${brand}/financials`}>Financeiro</NavItem>
+            <NavItem href={`/sponsor/${brand}/events`}>Eventos</NavItem>
+            <NavItem href={`/sponsor/${brand}/assets`}>Assets</NavItem>
+            <NavItem href={`/sponsor/${brand}/settings`}>Settings</NavItem>
+          </>
+        ) : (
+          <>
+            <NavItem href="/">Overview</NavItem>
+            <NavItem href="/projetos">Resultados</NavItem>
+            <NavItem href="/pipeline">Financeiro</NavItem>
+            <NavItem href="/settings">Settings</NavItem>
+          </>
+        )}
+      </aside>
+
+      {/* Sidebar desktop */}
+      <aside className="hidden md:block w-[260px]">
+        <div className="p-4 space-y-3">
+          {role === "sponsor" ? (
+            <>
+              <NavItem href={`/sponsor/${brand}/overview`}>Overview</NavItem>
+              <NavItem href={`/sponsor/${brand}/results`}>Resultados</NavItem>
+              <NavItem href={`/sponsor/${brand}/financials`}>Financeiro</NavItem>
+              <NavItem href={`/sponsor/${brand}/events`}>Eventos</NavItem>
+              <NavItem href={`/sponsor/${brand}/assets`}>Assets</NavItem>
+              <NavItem href={`/sponsor/${brand}/settings`}>Settings</NavItem>
+            </>
+          ) : (
+            <>
+              <NavItem href="/">Overview</NavItem>
+              <NavItem href="/projetos">Resultados</NavItem>
+              <NavItem href="/pipeline">Financeiro</NavItem>
+              <NavItem href="/settings">Settings</NavItem>
+            </>
+          )}
+        </div>
+      </aside>
+    </>
   );
 }

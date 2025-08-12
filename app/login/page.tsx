@@ -53,7 +53,7 @@ export default function Page(){
         </button>
       </div>
 
-      <form onSubmit={onSubmit} className="rounded-2xl border bg-card p-6 shadow-soft space-y-4">
+      <form onSubmit={onSubmit} className="card p-6 shadow-soft space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <label className="block">
             <div className="text-sm mb-1">Usuário</div>

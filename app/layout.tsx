@@ -12,12 +12,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const role = cookies().get("role")?.value;
+  const role = cookies().get("role")?.value || "admin";
   const themeClass = role === "sponsor" ? "theme-sponsor" : "theme-admin";
 
   return (
     <html lang="pt-BR" className={`${themeClass} ${inter.variable} ${sora.variable}`}>
-      <body className="font-sans">
+      <body className="font-sans" data-role={role}>
         <Topbar />
         <div className="min-h-screen max-w-screen-2xl mx-auto px-4 py-6 flex gap-6">
           <Sidebar />

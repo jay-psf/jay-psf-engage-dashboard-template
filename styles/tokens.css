@@ -4,18 +4,17 @@
   --bg: #ffffff;
   --panel: #ffffff;
   --panel-2: #f7f9fc;
-  --text: #0f172a;         /* slate-900 */
-  --muted: #475569;        /* slate-600 */
-  --border: #e5e7eb;       /* gray-200 */
-  --ring: #2563eb;         /* brand ring */
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e5e7eb;
+  --ring: #2563eb;
 
-  /* acentos com vibe “corporate/premium” */
-  --brand-accent: #0ea5e9;     /* cyan-500 */
-  --brand-accent-600: #0284c7; /* cyan-600 */
-  --brand-contrast: #111827;   /* near-black */
+  --brand-accent: #0ea5e9;
+  --brand-accent-600: #0284c7;
+  --brand-contrast: #111827;
 
   --card: #ffffff;
-  --card-hover: #f1f5f9;   /* slate-100 */
+  --card-hover: #f1f5f9;
   --success: #16a34a;
   --warning: #f59e0b;
   --danger: #ef4444;
@@ -26,13 +25,13 @@
   --bg: #0a0e1a;
   --panel: #0F1424;
   --panel-2: #121938;
-  --text: #e5e7eb;       /* gray-200 */
-  --muted: #94a3b8;      /* slate-400 */
+  --text: #e5e7eb;
+  --muted: #94a3b8;
   --border: #1f2a44;
-  --ring: #22d3ee;       /* cyan-400 */
+  --ring: #22d3ee;
 
-  --brand-accent: #06b6d4;     /* cyan-500 */
-  --brand-accent-600:#0891b2;  /* cyan-600 */
+  --brand-accent: #06b6d4;
+  --brand-accent-600:#0891b2;
   --brand-contrast: #ffffff;
 
   --card: #0E1224;
@@ -41,3 +40,14 @@
   --warning: #F59E0B;
   --danger:  #EF4444;
 }
+
+/* --- Correções globais de contraste no tema sponsor --- */
+/* Qualquer coisa que venha com bg-white/bordas claras vira nossos tokens */
+.theme-sponsor .bg-white,
+.theme-sponsor [class*="bg-white"] { background: var(--panel) !important; }
+.theme-sponsor .text-black,
+.theme-sponsor [class*="text-black"] { color: var(--text) !important; }
+.theme-sponsor .border,
+.theme-sponsor .border-gray-100,
+.theme-sponsor .border-gray-200,
+.theme-sponsor [class*="border-gray-"] { border-color: var(--border) !important; }

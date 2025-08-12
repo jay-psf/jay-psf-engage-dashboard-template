@@ -1,35 +1,31 @@
 "use client";
-import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
-import Sidebar from "@/components/ui/Sidebar";
-import Topbar from "@/components/ui/Topbar";
+import { usePathname } from "next/navigation";
 
-type Session = { role?: "admin"|"sponsor"; brand?: string };
-function readSession(): Session {
-  try { const raw = localStorage.getItem("session"); return raw? JSON.parse(raw):{}; }
-  catch { return {}; }
+function readCookie(name:string){
+  const m = `; ${document.cookie}`.match(`;\\s*${name}=([^;]+)`);
+  return m ? decodeURIComponent(m[1]) : "";
 }
 
-export default function ClientShell({children}:{children:React.ReactNode}){
-  const path = usePathname();
-  const isLogin = path.startsWith("/login");
+export default function ClientShell({ children }:{children:React.ReactNode}){
+  const pathname = usePathname();
+  const role = useMemo(()=> readCookie("role") || "admin", []);
+  const brand = useMemo(()=> readCookie("brand") || "acme", []);
+  const isLogin = pathname === "/login";
 
-  const role = useMemo(() => readSession().role ?? "admin", [isLogin]);
   useEffect(()=>{
-    const s = readSession();
-    if(s.role==="sponsor") document.documentElement.setAttribute("data-theme","dark");
+    if(role === "sponsor") document.documentElement.setAttribute("data-theme","dark");
     else document.documentElement.removeAttribute("data-theme");
-  },[path]);
-
-  if(isLogin) return <main className="min-h-screen grid place-items-center px-4">{children}</main>;
+  },[role]);
 
   return (
     <>
-      <Topbar />
-      <div className="mx-auto max-w-screen-2xl grid grid-cols-[260px,1fr] gap-6 p-6">
-        <Sidebar />
-        <main className="min-h-[70vh]">{children}</main>
+      {/* mini style para transições suaves */}
+      <style>{`*{scrollbar-gutter:stable} main{animation:fadeIn .18s ease} @keyframes fadeIn{from{opacity:.01;transform:translateY(4px)} to{opacity:1;transform:none}}`}</style>
+      <div data-role={role} data-brand={brand}>
+        {children}
       </div>
+      {isLogin ? null : null}
     </>
   );
 }

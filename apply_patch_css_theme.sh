@@ -1,5 +1,3 @@
-# === criar patch ===
-cat > apply_patch_css_theme.sh <<'PATCH'
 set -euo pipefail
 
 echo "== 1) Reescrevendo CSS estável =="
@@ -163,4 +161,3 @@ pnpm build | tee .last_build.log
 echo "== Patch aplicado! Teste: =="
 echo "  • Admin:    usuario=admin   senha=123456"
 echo "  • Sponsor:  usuario=sponsor senha=000000"
-PATCH

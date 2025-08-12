@@ -1,34 +1,26 @@
 "use client";
 import clsx from "clsx";
+import { ButtonHTMLAttributes } from "react";
 
-type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "solid" | "outline";
-  size?: "sm" | "md" | "lg";
+  size?: "md" | "lg";
 };
 
-export default function Button({ variant="solid", size="md", className, ...rest }: Props) {
-  const base =
-    "inline-flex items-center justify-center rounded-full font-medium transition " +
-    "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--accent)] " +
-    "disabled:opacity-60 disabled:cursor-not-allowed";
-  const sizes = {
-    sm: "h-9 px-4 text-sm",
-    md: "h-11 px-5",
-    lg: "h-12 px-6 text-[15px]",
-  } as const;
-  const variants = {
-    solid:
-      "bg-[var(--accent)] text-white shadow-[0_8px_24px_rgba(16,167,221,.35)] " +
-      "hover:brightness-[1.03] hover:shadow-[0_10px_28px_rgba(16,167,221,.45)] active:brightness-[.98]",
-    outline:
-      "border border-current/15 text-[var(--text)] bg-transparent " +
-      "hover:bg-white/50 dark:hover:bg-white/5",
-  } as const;
-
+export default function Button({ className, variant="solid", size="md", ...props }: Props){
   return (
     <button
-      className={clsx(base, sizes[size], variants[variant], className)}
-      {...rest}
+      {...props}
+      className={clsx(
+        "inline-flex items-center justify-center rounded-full transition",
+        "focus:outline-none focus-visible:ring-4",
+        variant==="solid"
+          ? "bg-[var(--accent)] text-white shadow-[0_6px_18px_rgba(0,167,221,.25)] hover:opacity-95"
+          : "bg-transparent text-[var(--text)] border border-[var(--borderC)] hover:border-[var(--accent)]",
+        size==="lg" ? "h-12 px-6 text-[15px] font-semibold" : "h-11 px-5 text-[14px] font-semibold",
+        className
+      )}
+      style={{ boxShadow: "var(--elev)" }}
     />
   );
 }

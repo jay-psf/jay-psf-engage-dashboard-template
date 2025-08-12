@@ -17,9 +17,9 @@ export default function SponsorSettingsPage(){
       <section className="bg-card border border-border rounded-2xl p-4">
         <div className="font-medium mb-2">Tema</div>
         <div className="flex gap-2">
-          <Button variant={pref==="light"?"primary":"outline"} onClick={()=>setPref("light")}>Light</Button>
-          <Button variant={pref==="dark"?"primary":"outline"} onClick={()=>setPref("dark")}>Dark</Button>
-          <Button variant={pref==="system"?"primary":"outline"} onClick={()=>setPref("system")}>Sistema</Button>
+          <Button variant={pref==="light"?"solid":"outline"} onClick={()=>setPref("light")}>Light</Button>
+          <Button variant={pref==="dark"?"solid":"outline"} onClick={()=>setPref("dark")}>Dark</Button>
+          <Button variant={pref==="system"?"solid":"outline"} onClick={()=>setPref("system")}>Sistema</Button>
         </div>
       </section>
 

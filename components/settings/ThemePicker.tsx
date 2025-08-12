@@ -15,9 +15,9 @@ export default function ThemePicker(){
     <div className="card" style={{padding:16, display:"grid", gap:12}}>
       <h3 className="h3">Tema</h3>
       <div style={{display:"flex", gap:8, flexWrap:"wrap"}}>
-        <Button variant={pref==="light"?"primary":"outline"} onClick={()=>setPref("light")}>Light</Button>
-        <Button variant={pref==="dark"?"primary":"outline"} onClick={()=>setPref("dark")}>Dark</Button>
-        <Button variant={pref==="system"?"primary":"outline"} onClick={()=>setPref("system")}>Sistema</Button>
+        <Button variant={pref==="light"?"solid":"outline"} onClick={()=>setPref("light")}>Light</Button>
+        <Button variant={pref==="dark"?"solid":"outline"} onClick={()=>setPref("dark")}>Dark</Button>
+        <Button variant={pref==="system"?"solid":"outline"} onClick={()=>setPref("system")}>Sistema</Button>
       </div>
       <p className="subtle">Você pode sincronizar com o sistema ou escolher um tema fixo.</p>
     </div>

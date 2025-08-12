@@ -2,69 +2,46 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type Role = "admin" | "sponsor";
-
-const NavItem = ({ href, label }: { href: string; label: string }) => (
-  <Link
-    href={href}
-    className="flex items-center gap-2 px-3 py-2 rounded-xl border transition hover:bg-black/5"
-    style={{ borderColor: "var(--border)" }}
-  >
-    <div className="size-2 rounded-full" style={{ background: "var(--brand-accent)" }} />
-    <span className="font-medium">{label}</span>
-  </Link>
-);
-
 export default function Sidebar() {
-  const [role, setRole] = useState<Role>("admin");
+  const [role, setRole] = useState<"admin"|"sponsor">("admin");
+  const [brand, setBrand] = useState("");
 
   useEffect(() => {
-    const r = (document.body.dataset.role as Role) || "admin";
-    setRole(r);
+    const b = document.body;
+    setRole((b.dataset.role as any) || "admin");
+    setBrand(b.dataset.brand || "");
   }, []);
 
-  const common = (
-    <>
-      <div className="text-sm mb-2" style={{ color: "var(--muted)" }}>Navegação</div>
-      <div className="grid gap-2">
-        <NavItem href="/" label="Dashboard" />
-      </div>
-    </>
-  );
-
-  const adminOnly = (
-    <>
-      <div className="grid gap-2 mt-3">
-        <NavItem href="/pipeline" label="Pipeline" />
-        <NavItem href="/projetos" label="Projetos" />
-        <NavItem href="/admin" label="Admin" />
-      </div>
-      <div className="hr my-4" />
-      <div className="text-sm mb-2" style={{ color: "var(--muted)" }}>Patrocinador</div>
-      <div className="grid gap-2">
-        <NavItem href="/sponsor/acme/overview" label="Overview" />
-        <NavItem href="/sponsor/acme/results" label="Resultados" />
-        <NavItem href="/sponsor/acme/financials" label="Financeiro" />
-      </div>
-    </>
-  );
-
-  const sponsorOnly = (
-    <>
-      <div className="text-sm mb-2" style={{ color: "var(--muted)" }}>Patrocinador</div>
-      <div className="grid gap-2">
-        <NavItem href="/sponsor/acme/overview" label="Overview" />
-        <NavItem href="/sponsor/acme/results" label="Resultados" />
-        <NavItem href="/sponsor/acme/financials" label="Financeiro" />
-      </div>
-    </>
+  const Item = ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <Link href={href} className="block px-4 py-3 rounded-xl border"
+      style={{ borderColor:"var(--border)", background:"var(--panel)", color:"var(--text)" }}>
+      {children}
+    </Link>
   );
 
   return (
-    <aside className="w-64 shrink-0 p-4 hidden md:block">
-      <div className="card p-4 shadow-soft">
-        {common}
-        {role === "admin" ? adminOnly : sponsorOnly}
+    <aside className="w-[260px] shrink-0">
+      <div className="space-y-4">
+        {role === "admin" && (
+          <div>
+            <div className="mb-2 text-sm" style={{ color:"var(--muted)" }}>Navegação</div>
+            <div className="space-y-2">
+              <Item href="/">Dashboard</Item>
+              <Item href="/pipeline">Pipeline</Item>
+              <Item href="/projetos">Projetos</Item>
+              <Item href="/admin">Admin</Item>
+            </div>
+          </div>
+        )}
+
+        <div>
+          <div className="mb-2 text-sm" style={{ color:"var(--muted)" }}>Patrocinador</div>
+          <div className="space-y-2">
+            <Item href={`/sponsor/${brand || "heineken"}/overview`}>Overview</Item>
+            <Item href={`/sponsor/${brand || "heineken"}/results`}>Resultados</Item>
+            <Item href={`/sponsor/${brand || "heineken"}/financials`}>Financeiro</Item>
+          </div>
+        </div>
       </div>
     </aside>
   );

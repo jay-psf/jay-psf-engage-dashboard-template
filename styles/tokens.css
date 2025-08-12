@@ -1,53 +1,35 @@
-/* Admin (claro) por padrão */
-:root,
+:root {
+  --bg: #0b101a;
+  --text: #e6e8ee;
+  --muted: #a7afc0;
+  --border: #263042;
+  --panel: #121826;   /* cartões padrão */
+  --panel-2: #0f1624; /* cartões alternativos */
+  --brand-accent: #0ea5e9;
+  --brand-contrast: #ffffff;
+}
+
+/* Admin (claro) */
 .theme-admin {
-  --bg: #ffffff;
-  --panel: #ffffff;
-  --panel-2: #f7f9fc;
+  --bg: #f7fafc;
   --text: #0f172a;
   --muted: #475569;
-  --border: #e5e7eb;
-  --ring: #2563eb;
-
+  --border: #e2e8f0;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
   --brand-accent: #0ea5e9;
-  --brand-accent-600: #0284c7;
-  --brand-contrast: #111827;
-
-  --card: #ffffff;
-  --card-hover: #f1f5f9;
-  --success: #16a34a;
-  --warning: #f59e0b;
-  --danger: #ef4444;
 }
 
-/* Sponsor (escuro) */
+/* Sponsor (escuro melhor contrastado) */
 .theme-sponsor {
-  --bg: #0a0e1a;
-  --panel: #0F1424;
-  --panel-2: #121938;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --border: #1f2a44;
-  --ring: #22d3ee;
-
-  --brand-accent: #06b6d4;
-  --brand-accent-600:#0891b2;
-  --brand-contrast: #ffffff;
-
-  --card: #0E1224;
-  --card-hover: #151C3A;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger:  #EF4444;
+  --bg: #0b101a;
+  --text: #e6e8ee;
+  --muted: #9aa4b2;
+  --border: #233047;
+  --panel: #111827;
+  --panel-2: #0e1524;
+  --brand-accent: #e11d48; /* pode ajustar depois por marca */
 }
 
-/* --- Correções globais de contraste no tema sponsor --- */
-/* Qualquer coisa que venha com bg-white/bordas claras vira nossos tokens */
-.theme-sponsor .bg-white,
-.theme-sponsor [class*="bg-white"] { background: var(--panel) !important; }
-.theme-sponsor .text-black,
-.theme-sponsor [class*="text-black"] { color: var(--text) !important; }
-.theme-sponsor .border,
-.theme-sponsor .border-gray-100,
-.theme-sponsor .border-gray-200,
-.theme-sponsor [class*="border-gray-"] { border-color: var(--border) !important; }
+html { background: var(--bg); color: var(--text); }
+body { background: var(--bg); color: var(--text); }

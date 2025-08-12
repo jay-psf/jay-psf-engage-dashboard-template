@@ -1,43 +1,47 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { readSession, type Session } from "@/components/lib/session";
 
-export default function Topbar({ role, brand }: { role:"admin"|"sponsor"; brand?: string }){
-  const [loading, setLoading] = useState(false);
+type Props = { role?: "admin" | "sponsor"; brand?: string };
 
-  async function logout(){
-    setLoading(true);
-    try{
-      await fetch("/api/logout",{ method:"POST" });
-      window.location.href = "/login";
-    }finally{ setLoading(false); }
-  }
+export default function Topbar(p: Props = {}) {
+  const [s, setS] = useState<Session>({});
 
-  const showLogo = role==="sponsor" && brand;
-  const logoSrc = brand ? `/logos/${brand}.png` : undefined;
+  useEffect(() => {
+    const fromSess = readSession();
+    setS({
+      role: p.role ?? fromSess.role ?? "admin",
+      brand: p.brand ?? fromSess.brand,
+      username: fromSess.username,
+    });
+  }, [p.role, p.brand]);
+
+  const isSponsor = s.role === "sponsor";
+  const brandLogo =
+    isSponsor && (s.brand?.toLowerCase() === "heineken")
+      ? "/logos/heineken.png"
+      : undefined;
 
   return (
-    <header className="sticky top-0 z-30 bg-[var(--bg)]/80 backdrop-blur-md">
-      <div className="mx-auto max-w-screen-2xl flex items-center justify-between p-4">
+    <header className="sticky top-0 z-30 border-b border-border bg-card/85 backdrop-blur">
+      <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-3">
         <div className="flex items-center gap-3">
-          <div className="h-3 w-3 rounded-full" style={{background:"var(--accent)"}}/>
-          <span className="font-semibold">Engage Dashboard</span>
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
+          <span className="font-medium">Engage Dashboard</span>
+          {isSponsor && brandLogo && (
+            <span className="ml-3 inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-2.5 py-1 text-xs">
+              <Image src={brandLogo} alt={s.brand ?? "brand"} width={18} height={18} />
+              <span className="opacity-80">{s.brand}</span>
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center gap-4">
-          {showLogo && logoSrc ? (
-            <Image src={logoSrc} alt={`${brand} logo`} width={88} height={24} priority />
-          ) : null}
-
-          <a href="/settings" className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 hover:shadow-soft">
-            <div className="h-8 w-8 rounded-full bg-surface grid place-items-center border border-border">👤</div>
-            <span className="text-sm text-muted hidden sm:inline">Perfil</span>
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 overflow-hidden rounded-full border border-border bg-surface" />
+          <a href="/settings" className="rounded-lg border border-border px-3 py-1.5 text-sm hover:opacity-90">
+            Settings
           </a>
-
-          <button onClick={logout} disabled={loading}
-            className="px-3 py-1.5 rounded-lg border text-sm hover:shadow-soft">
-            {loading ? "Saindo..." : "Sair"}
-          </button>
         </div>
       </div>
     </header>

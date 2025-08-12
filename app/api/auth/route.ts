@@ -1,22 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { username, password, role, brand } = await req.json();
+export async function POST(req: NextRequest) {
+  const { role, brand } = await req.json();
 
-  // Mock simples (vamos trocar por auth real depois)
-  const okAdmin = role === "admin" && username === "admin" && password === "123456";
-  const okSponsor = role === "sponsor" && username === "sponsor" && password === "000000";
-
-  if (!okAdmin && !okSponsor) {
-    return new NextResponse("unauthorized", { status: 401 });
+  // Validação mínima de demo
+  if (role !== "admin" && role !== "sponsor") {
+    return NextResponse.json({ ok: false, error: "invalid role" }, { status: 400 });
   }
 
-  const res = NextResponse.redirect(new URL(okSponsor ? `/sponsor/${brand || "heineken"}/overview` : "/", req.url));
-  res.cookies.set("role", role, { path: "/", httpOnly: false });
-  if (okSponsor) {
-    res.cookies.set("brand", brand || "heineken", { path: "/", httpOnly: false });
+  const res = NextResponse.json({ ok: true });
+
+  // 7 dias
+  res.cookies.set("role", role, { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60*60*24*7 });
+  if (role === "sponsor") {
+    res.cookies.set("brand", brand || "heineken", { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60*60*24*7 });
   } else {
-    res.cookies.set("brand", "", { path: "/", httpOnly: false });
+    res.cookies.set("brand", "", { path: "/", maxAge: 0 });
   }
+
   return res;
 }

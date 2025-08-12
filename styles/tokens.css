@@ -1,35 +1,46 @@
 :root {
-  --bg: #0b101a;
-  --text: #e6e8ee;
-  --muted: #a7afc0;
-  --border: #263042;
-  --panel: #121826;   /* cartões padrão */
-  --panel-2: #0f1624; /* cartões alternativos */
-  --brand-accent: #0ea5e9;
-  --brand-contrast: #ffffff;
-}
-
-/* Admin (claro) */
-.theme-admin {
-  --bg: #f7fafc;
+  /* Cores base (modo claro) — ajuste depois com os tons oficiais da Entourage */
+  --bg: #f6f8fb;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --border: #e6eaf0;
   --text: #0f172a;
-  --muted: #475569;
-  --border: #e2e8f0;
-  --panel: #ffffff;
-  --panel-2: #f8fafc;
-  --brand-accent: #0ea5e9;
+  --muted: #64748b;
+
+  /* Acento (inspirado no botão “+” do seu topo) */
+  --accent: #10b5d6;        /* ciano/teal */
+  --accent-strong: #0ea5b6; /* um pouco mais escuro */
+
+  /* Sombras suaves */
+  --shadow: 0 10px 35px rgba(2, 6, 23, 0.06);
+
+  /* Tipografia */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  --radius: 16px;
 }
 
-/* Sponsor (escuro melhor contrastado) */
-.theme-sponsor {
-  --bg: #0b101a;
-  --text: #e6e8ee;
-  --muted: #9aa4b2;
-  --border: #233047;
-  --panel: #111827;
-  --panel-2: #0e1524;
-  --brand-accent: #e11d48; /* pode ajustar depois por marca */
+/* Tema escuro (patrocinador) */
+:root[data-theme="dark"] {
+  --bg: #0b1220;
+  --surface: #0e1626;
+  --card: #111a2c;
+  --border: #1b273d;
+  --text: #e5e7eb;
+  --muted: #93a0b6;
+
+  --accent: #10b5d6;
+  --accent-strong: #1fb6ce;
+
+  --shadow: 0 12px 40px rgba(2, 6, 23, 0.4);
 }
 
-html { background: var(--bg); color: var(--text); }
-body { background: var(--bg); color: var(--text); }
+/* Utilitários globais (usamos nos cartões/botões) */
+:root, [data-theme="dark"] {
+  --ring: 2px solid rgba(16,181,214,.35);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}

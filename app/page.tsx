@@ -1,39 +1,40 @@
-export default function Page(){
-  const Kpi = ({label, value}:{label:string; value:string}) => (
-    <div className="card p-5">
-      <div className="text-sm text-muted">{label}</div>
-      <div className="text-2xl font-semibold mt-1">{value}</div>
+export default function Page() {
+  const Kpi = ({ title, value }: { title: string; value: string }) => (
+    <div className="rounded-2xl border border-[var(--border)] bg-card p-5 shadow-soft">
+      <p className="text-[12px] uppercase tracking-wide text-[var(--muted)]">{title}</p>
+      <p className="mt-2 text-[26px] font-bold">{value}</p>
     </div>
   );
 
   return (
-    <>
-      <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Kpi label="Receita acumulada" value="R$ 2.311.674,00" />
-        <Kpi label="Eventos ativos" value="12" />
-        <Kpi label="Leads no funil" value="184" />
-        <Kpi label="Satisfação média" value="4,7/5" />
+    <div className="space-y-6">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <Kpi title="Receita acumulada" value="R$ 2.311.674,00" />
+        <Kpi title="Eventos ativos" value="12" />
+        <Kpi title="Leads no funil" value="184" />
+        <Kpi title="Satisfação média" value="4,7/5" />
       </section>
 
-      <section className="grid lg:grid-cols-3 gap-4">
-        <div className="card p-5 lg:col-span-2">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Performance recente</h3>
-            <button className="btn-primary">Ver detalhes</button>
+      <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <div className="rounded-2xl border border-[var(--border)] bg-card p-5 shadow-soft xl:col-span-2">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-[15px] font-semibold">Performance recente</h3>
+            <button className="rounded-full border border-[var(--border)] px-3 py-1.5 text-[13px] hover:bg-cardghost">
+              Ver detalhes
+            </button>
           </div>
-          <div className="mt-4 h-64 grid place-items-center text-muted">
-            (gráfico entra aqui)
-          </div>
+          <div className="h-[300px] rounded-xl border border-dashed border-[var(--border)] bg-cardghost/40" />
         </div>
-        <div className="card p-5">
-          <h3 className="font-semibold">Próximos marcos</h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted">
+
+        <div className="rounded-2xl border border-[var(--border)] bg-card p-5 shadow-soft">
+          <h3 className="mb-3 text-[15px] font-semibold">Próximos marcos</h3>
+          <ul className="space-y-2 text-[14px] text-[var(--text)]/90">
             <li>Entrega de relatório do Evento X</li>
             <li>Kickoff com patrocinador ACME</li>
             <li>Publicação de álbum de fotos</li>
           </ul>
         </div>
       </section>
-    </>
+    </div>
   );
 }

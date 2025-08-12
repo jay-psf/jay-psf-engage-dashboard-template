@@ -2,41 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-* { box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); }
-
-.label { font-size: .875rem; color: var(--muted); margin-bottom: .25rem; }
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.08);
-}
-.input {
-  width: 100%;
-  background: var(--panel-2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
-  outline: none;
-}
-.input::placeholder { color: var(--muted); }
-.input:focus { border-color: var(--brand-accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-accent) 30%, transparent); }
-
-.btn-primary {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 10px 16px; border-radius: 999px;
-  background: var(--brand-accent); color: var(--brand-contrast);
-  border: 1px solid color-mix(in oklab, var(--brand-accent) 75%, black);
-}
-.btn-primary:hover { filter: brightness(1.05); }
-
-.btn-ghost {
-  padding: 10px 16px; border-radius: 999px;
-  background: transparent; color: var(--text);
-  border: 1px solid var(--border);
-}
-
-a { color: inherit; }
+html, body { height: 100%; }

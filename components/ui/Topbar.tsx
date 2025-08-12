@@ -1,45 +1,57 @@
+"use client";
 import Image from "next/image";
-import Link from "next/link";
-import { cookies } from "next/headers";
+import { useEffect, useState } from "react";
+import Button from "./Button";
+
+type Session = { role: "admin" | "sponsor"; brand?: string; username?: string };
+
+function readSession(): Session {
+  try {
+    const raw = window.localStorage.getItem("session");
+    return raw ? JSON.parse(raw) as Session : { role: "admin" };
+  } catch {
+    return { role: "admin" };
+  }
+}
 
 export default function Topbar() {
-  const c = cookies();
-  const role = c.get("role")?.value || "guest";
-  const brand = c.get("brand")?.value || "";
-  const brandName = brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : "";
+  const [s, setS] = useState<Session>({ role: "admin" });
+
+  useEffect(() => setS(readSession()), []);
+
+  const isSponsor = s.role === "sponsor";
+  const brand = (s.brand || "acme").toLowerCase();
 
   return (
-    <header className="sticky top-0 z-20 border-b border-entourage-line-light/70 bg-entourage-surface-light/90 backdrop-blur dark:bg-entourage-surface-dark/60 dark:border-entourage-line-dark/70">
-      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+    <header className="w-full sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-surface/70 bg-surface border-b border-border">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center gap-3">
+        {/* Marca do produto */}
         <div className="flex items-center gap-3">
-          <div className="h-7 w-7 rounded-md bg-entourage-primary/90" />
+          <div className="w-3 h-3 rounded-full bg-accent" />
           <span className="font-semibold">Engage Dashboard</span>
         </div>
 
-        <div className="flex items-center gap-3">
-          {role === "sponsor" && (
+        <div className="ml-auto flex items-center gap-3">
+          {isSponsor ? (
             <div className="flex items-center gap-3">
-              {/* Se existir o arquivo em /public/brands/<brand>.png ele aparece; senão, mostra só o nome */}
-              <div className="relative h-8 w-28">
+              {/* Logo do patrocinador */}
+              <div className="relative w-[110px] h-7">
                 <Image
-                  src={`/brands/${brand}.png`}
-                  alt={brandName || "Marca"}
+                  alt={`${brand} logo`}
+                  src={brand === "heineken" ? "/logos/heineken.png" : "/logos/acme.svg"}
                   fill
                   className="object-contain"
-                  sizes="112px"
-                  onError={() => {}}
+                  priority
                 />
               </div>
-              <span className="text-sm opacity-80">{brandName}</span>
             </div>
+          ) : (
+            <span className="text-sm text-muted">Engage (interno)</span>
           )}
 
-          <Link
-            href="/api/logout"
-            className="rounded-pill bg-transparent border px-3 py-1.5 text-sm border-entourage-line-light hover:bg-entourage-line-light/40 transition dark:border-entourage-line-dark dark:hover:bg-entourage-line-dark/40"
-          >
-            Sair
-          </Link>
+          <form action="/api/logout" method="post">
+            <Button type="submit" variant="outline" size="sm">Sair</Button>
+          </form>
         </div>
       </div>
     </header>

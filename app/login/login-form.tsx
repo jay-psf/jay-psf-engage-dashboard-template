@@ -9,20 +9,16 @@ export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // preenche exemplo pra facilitar teste
-  useEffect(() => {
-    setUsername("admin");
-    setPassword("123456");
-  }, []);
+  // Preenche exemplo pra facilitar demo
+  useEffect(() => { setUsername("admin"); setPassword("123456"); }, []);
 
   function resolveBrandFromUser(u: string): string {
-    // Regras simples de demo: "sponsor" => heineken; senão acme
+    // Regra simples de demo
     return u.toLowerCase() === "sponsor" ? "heineken" : "acme";
   }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // validação simples de demo
     const ok =
       (role === "admin" && username === "admin" && password === "123456") ||
       (role === "sponsor" && username === "sponsor" && password === "000000");
@@ -33,83 +29,76 @@ export default function LoginForm() {
     }
 
     const brand = role === "sponsor" ? resolveBrandFromUser(username) : undefined;
+    await fetch("/api/auth", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ role, brand }),
+    });
 
-    // guarda sessão no localStorage
-    const session = { role, brand, username };
-    window.localStorage.setItem("session", JSON.stringify(session));
-
-    // ajusta tema (patrocinador = dark)
-    const html = document.documentElement;
-    if (role === "sponsor") html.setAttribute("data-theme", "dark");
-    else html.removeAttribute("data-theme");
-
-    // redireciona
-    if (role === "sponsor") {
-      window.location.href = `/sponsor/${brand}/overview`;
-    } else {
-      window.location.href = "/";
-    }
+    // Redireciona pelo perfil
+    if (role === "sponsor") window.location.href = `/sponsor/${brand}/overview`;
+    else window.location.href = "/";
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] grid place-items-center">
-      <div className="w-full max-w-3xl space-y-6">
-        <div className="grid md:grid-cols-2 gap-4">
-          <button
-            onClick={() => setRole("admin")}
-            className={`rounded-2xl border p-5 text-left bg-card border-border shadow-soft ${
-              role === "admin" ? "ring-2 ring-accent" : ""
-            }`}
-          >
-            <div className="text-sm text-muted">Perfil</div>
-            <div className="mt-1 font-semibold">Interno (Admin)</div>
-            <div className="text-sm text-muted mt-1">Acesso a tudo</div>
-          </button>
+    <div className="space-y-6">
+      <div className="grid md:grid-cols-2 gap-4">
+        <button
+          onClick={() => { setRole("admin"); setUsername("admin"); setPassword("123456"); }}
+          className={`rounded-2xl border p-5 text-left bg-card border-border hover:shadow-soft transition ${
+            role === "admin" ? "ring-2 ring-[var(--accent)]" : ""
+          }`}
+        >
+          <div className="text-sm text-muted">Perfil</div>
+          <div className="mt-1 font-semibold">Interno (Admin)</div>
+          <div className="text-sm text-muted mt-1">Acesso a tudo</div>
+        </button>
 
-          <button
-            onClick={() => setRole("sponsor")}
-            className={`rounded-2xl border p-5 text-left bg-card border-border shadow-soft ${
-              role === "sponsor" ? "ring-2 ring-accent" : ""
-            }`}
-          >
-            <div className="text-sm text-muted">Perfil</div>
-            <div className="mt-1 font-semibold">Patrocinador</div>
-            <div className="text-sm text-muted mt-1">Acesso ao próprio contrato</div>
-          </button>
+        <button
+          onClick={() => { setRole("sponsor"); setUsername("sponsor"); setPassword("000000"); }}
+          className={`rounded-2xl border p-5 text-left bg-card border-border hover:shadow-soft transition ${
+            role === "sponsor" ? "ring-2 ring-[var(--accent)]" : ""
+          }`}
+        >
+          <div className="text-sm text-muted">Perfil</div>
+          <div className="mt-1 font-semibold">Patrocinador</div>
+          <div className="text-sm text-muted mt-1">Acesso ao próprio contrato</div>
+        </button>
+      </div>
+
+      <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          <label className="block">
+            <div className="text-sm mb-1">Usuário</div>
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full h-11 rounded-xl border border-border bg-surface px-3"
+              placeholder={role === "admin" ? "admin" : "sponsor"}
+              autoComplete="username"
+            />
+          </label>
+          <label className="block">
+            <div className="text-sm mb-1">Senha</div>
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-11 rounded-xl border border-border bg-surface px-3"
+              placeholder={role === "admin" ? "123456" : "000000"}
+              type="password"
+              autoComplete="current-password"
+            />
+          </label>
         </div>
 
-        <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <label className="block">
-              <div className="text-sm mb-1">Usuário</div>
-              <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full h-11 rounded-xl border border-border bg-surface px-3"
-                placeholder={role === "admin" ? "admin" : "sponsor"}
-              />
-            </label>
-            <label className="block">
-              <div className="text-sm mb-1">Senha</div>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-11 rounded-xl border border-border bg-surface px-3"
-                placeholder={role === "admin" ? "123456" : "000000"}
-                type="password"
-              />
-            </label>
-          </div>
-
-          <div className="flex gap-3 pt-2">
-            <Button type="submit" size="lg" className="px-6">Entrar</Button>
-            <Button type="button" variant="outline" onClick={()=>{
-              if (role === "admin") { setUsername("admin"); setPassword("123456"); }
-              else { setUsername("sponsor"); setPassword("000000"); }
-            }}>Preencher exemplo</Button>
-          </div>
-        </form>
-      </div>
-    </main>
+        <div className="flex gap-3 pt-2">
+          <Button type="submit" size="lg" className="px-6">Entrar</Button>
+          <Button type="button" variant="outline" onClick={()=>{
+            if (role === "admin") { setUsername("admin"); setPassword("123456"); }
+            else { setUsername("sponsor"); setPassword("000000"); }
+          }}>Preencher exemplo</Button>
+        </div>
+      </form>
+    </div>
   );
 }

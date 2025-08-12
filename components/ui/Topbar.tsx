@@ -1,38 +1,25 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import Button from "./Button";
 
-type Session = { role?: "admin" | "sponsor"; brand?: string; username?: string };
-
-function readSession(): Session {
-  try { const raw = window.localStorage.getItem("session"); return raw ? JSON.parse(raw) : {}; }
-  catch { return {}; }
-}
-
-export default function Topbar() {
-  const [s, setS] = useState<Session>({});
-  useEffect(() => setS(readSession()), []);
-  const isSponsor = s.role === "sponsor";
-  const brand = (s.brand || "acme").toLowerCase();
-  const logoSrc = brand === "heineken" ? "/logos/heineken.png" : "/logos/acme.svg";
-
+export default function Topbar({ role, brandLogo }: { role: "admin"|"sponsor"; brandLogo?: string }) {
   return (
-    <header className="w-full sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-surface/70 bg-surface border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center gap-3">
+    <header className="sticky top-0 z-40 h-16 bg-[var(--bg)]/80 backdrop-blur border-b border-border flex items-center">
+      <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="w-3 h-3 rounded-full bg-accent" />
-          <span className="font-semibold">Engage Dashboard</span>
-        </div>
-        <div className="ml-auto flex items-center gap-4">
-          {isSponsor && (
-            <div className="relative w-[150px] h-8">
-              <Image alt={`${brand} logo`} src={logoSrc} fill className="object-contain" priority />
+          {brandLogo ? (
+            <div className="h-8 w-28 relative">
+              <Image src={brandLogo} alt="Logo patrocinador" fill className="object-contain" sizes="112px" />
             </div>
+          ) : (
+            <div className="text-lg font-semibold tracking-tight">Entourage • Engage</div>
           )}
-          <form action="/api/logout" method="post">
-            <button className="px-3 py-1.5 rounded-lg border text-sm">Sair</button>
-          </form>
         </div>
+        <nav className="flex items-center gap-2">
+          <form action="/api/logout" method="post">
+            <Button type="submit" variant="outline">Sair</Button>
+          </form>
+        </nav>
       </div>
     </header>
   );

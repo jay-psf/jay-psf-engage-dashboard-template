@@ -5,19 +5,19 @@ export function middleware(req: NextRequest) {
   const role = req.cookies.get("role")?.value;
   const brand = req.cookies.get("brand")?.value;
 
-  // público
+  // Público
   if (pathname === "/login" || pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 
-  // sem sessão => login
+  // Sem sessão => login
   if (!role) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // patrocinador só pode /sponsor/[brand]/*
+  // Patrocinador: trava fora do escopo /sponsor/[brand]/*
   if (role === "sponsor") {
     const b = brand || "heineken";
     if (!pathname.startsWith(`/sponsor/${b}`)) {

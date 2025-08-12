@@ -1,0 +1,22 @@
+:root {
+  --accent: #00A7DD;        /* cor de ação */
+  --bg: #F6F8FB;            /* fundo claro */
+  --card: #FFFFFF;          /* cartões */
+  --text: #0B1524;          /* texto */
+  --muted: #667085;         /* texto secundário */
+  --border-color: rgba(16,24,40,0.08);
+}
+:root[data-theme="dark"] {
+  --accent: #00A7DD;
+  --bg: #0B1220;            /* fundo escuro */
+  --card: #111827;          /* cartões escuros */
+  --text: #E6E8EC;
+  --muted: #9BA3AF;
+  --border-color: rgba(255,255,255,0.10);
+}
+.border { border: 1px solid var(--border-color); }
+.bg-card { background: var(--card); }
+.bg-surface { background: color-mix(in oklab, var(--card) 82%, var(--bg)); }
+.text-muted { color: var(--muted); }
+.bg-[var(--accent)] { background: var(--accent); }
+.shadow-soft { box-shadow: 0 8px 30px rgba(2, 32, 71, .08); }

@@ -2,36 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-html,body{height:100%;}
-body{
+html, body { height: 100%; }
+html { scroll-behavior: smooth; }
+body {
   background: var(--bg);
   color: var(--text);
+  font-feature-settings: "liga" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.card{
-  @apply rounded-2xl border shadow-sm transition;
+/* Cards */
+.card {
+  @apply rounded-2xl border transition;
   background: var(--panel);
   border-color: var(--border);
+  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.06));
 }
-.card:hover{ background: var(--card-hover); }
+.card:hover { background: var(--card-hover); }
 
-.btn-primary{
-  @apply inline-flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition;
-  color: white;
+/* Botões */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition;
+  border: 1px solid var(--border);
+}
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.btn-primary {
+  color: var(--brand-contrast);
   background: linear-gradient(180deg, var(--brand-accent) 0%, var(--brand-accent-600) 100%);
-  border: 1px solid rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,.06);
 }
-.btn-primary:hover{ filter: brightness(1.05); }
+.btn-primary:hover { filter: brightness(1.05); }
 
-.input{
-  @apply w-full rounded-lg border px-3 py-2 bg-transparent outline-none;
+.btn-outline {
+  background: transparent;
+  color: var(--text);
   border-color: var(--border);
 }
-.input:focus{
+.btn-outline:hover { background: color-mix(in oklab, var(--panel) 92%, black 8%); }
+
+/* Inputs */
+.input {
+  @apply w-full rounded-xl border px-3 py-2 bg-transparent outline-none;
+  border-color: var(--border);
+}
+.input:focus {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
   border-color: var(--ring);
 }
 
-.hr{
-  height:1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.14), transparent);
+/* Badges */
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium border;
+  border-color: var(--border);
+  background: color-mix(in oklab, var(--panel) 92%, black 8%);
 }
+
+/* Tabelas */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.table thead th {
+  text-align: left;
+  font-size: .75rem;
+  letter-spacing: .02em;
+  color: var(--muted);
+  background: color-mix(in oklab, var(--panel) 96%, black 4%);
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.table tbody td {
+  padding: .9rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.table tbody tr:last-child td { border-bottom: 0; }
+
+/* util */
+.hr { height:1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,.14), transparent); }
+.section { @apply grid gap-4; }

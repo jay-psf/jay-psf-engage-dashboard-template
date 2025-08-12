@@ -1,36 +1,28 @@
 import type { Config } from "tailwindcss";
 
-export default {
-  darkMode: ["class"],
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./styles/**/*.css"],
+const config: Config = {
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
+    "./styles/**/*.css",
+  ],
   theme: {
     extend: {
-      colors: {
-        brand: {
-          DEFAULT: "var(--brand-primary)",
-          600: "var(--brand-primary-600)",
-          accent: "var(--brand-accent)",
-          "accent-600": "var(--brand-accent-600)",
-        },
-        panel: "var(--panel)",
-        "panel-2": "var(--panel-2)",
-        card: "var(--card)",
-        text: "var(--text)",
-        muted: "var(--muted)",
-        border: "var(--border)",
-        ring: "var(--ring)",
-        success: "var(--success)",
-        warning: "var(--warning)",
-        danger: "var(--danger)",
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-sora)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        soft: "0 8px 30px rgba(2,6,23,0.25)"
+        soft: "0 8px 24px rgba(0,0,0,.06)",
+        soft2: "0 12px 32px rgba(0,0,0,.08)",
       },
       borderRadius: {
-        xl: "1rem",
-        "2xl": "1.25rem",
-      }
+        xl: "0.875rem",
+        "2xl": "1rem",
+      },
     },
   },
   plugins: [],
-} satisfies Config;
+};
+export default config;

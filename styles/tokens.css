@@ -1,40 +1,39 @@
-/* Tema padrão = admin (claro). Sponsor (escuro) abaixo */
+/* Admin (claro) por padrão */
 :root,
 .theme-admin {
   --bg: #ffffff;
   --panel: #ffffff;
-  --panel-2: #f8fafc;
-  --text: #0f172a;
-  --muted: #475569;
-  --border: #e2e8f0;
-  --ring: #2563eb;
+  --panel-2: #f7f9fc;
+  --text: #0f172a;         /* slate-900 */
+  --muted: #475569;        /* slate-600 */
+  --border: #e5e7eb;       /* gray-200 */
+  --ring: #2563eb;         /* brand ring */
 
-  --brand-primary: #0f172a;
-  --brand-primary-600: #111827;
-  --brand-accent: #0ea5e9;
-  --brand-accent-600: #0284c7;
+  /* acentos com vibe “corporate/premium” */
+  --brand-accent: #0ea5e9;     /* cyan-500 */
+  --brand-accent-600: #0284c7; /* cyan-600 */
+  --brand-contrast: #111827;   /* near-black */
 
   --card: #ffffff;
-  --card-hover: #f1f5f9;
+  --card-hover: #f1f5f9;   /* slate-100 */
   --success: #16a34a;
   --warning: #f59e0b;
   --danger: #ef4444;
 }
 
-/* Tema sponsor = escuro */
+/* Sponsor (escuro) */
 .theme-sponsor {
-  --bg: #0B0F19;
+  --bg: #0a0e1a;
   --panel: #0F1424;
   --panel-2: #121938;
-  --text: #E5E7EB;
-  --muted: #94A3B8;
-  --border: #1F2A44;
-  --ring: #38BDF8;
+  --text: #e5e7eb;       /* gray-200 */
+  --muted: #94a3b8;      /* slate-400 */
+  --border: #1f2a44;
+  --ring: #22d3ee;       /* cyan-400 */
 
-  --brand-primary: #0F172A;
-  --brand-primary-600:#111827;
-  --brand-accent:  #06B6D4;
-  --brand-accent-600:#0891B2;
+  --brand-accent: #06b6d4;     /* cyan-500 */
+  --brand-accent-600:#0891b2;  /* cyan-600 */
+  --brand-contrast: #ffffff;
 
   --card: #0E1224;
   --card-hover: #151C3A;

@@ -1,39 +1,34 @@
 "use client";
-import { forwardRef } from "react";
 import clsx from "clsx";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "outline" | "ghost";
+  variant?: "solid" | "outline";
   size?: "sm" | "md" | "lg";
 };
 
-const sizes = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-11 px-4 text-sm",
-  lg: "h-12 px-6 text-base",
-} as const;
+export default function Button({ variant="solid", size="md", className, ...rest }: Props) {
+  const base =
+    "inline-flex items-center justify-center rounded-full font-medium transition " +
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--accent)] " +
+    "disabled:opacity-60 disabled:cursor-not-allowed";
+  const sizes = {
+    sm: "h-9 px-4 text-sm",
+    md: "h-11 px-5",
+    lg: "h-12 px-6 text-[15px]",
+  } as const;
+  const variants = {
+    solid:
+      "bg-[var(--accent)] text-white shadow-[0_8px_24px_rgba(16,167,221,.35)] " +
+      "hover:brightness-[1.03] hover:shadow-[0_10px_28px_rgba(16,167,221,.45)] active:brightness-[.98]",
+    outline:
+      "border border-current/15 text-[var(--text)] bg-transparent " +
+      "hover:bg-white/50 dark:hover:bg-white/5",
+  } as const;
 
-const variants = {
-  primary: "bg-accent text-white hover:opacity-90",
-  outline: "border border-border bg-card hover:shadow-soft",
-  ghost: "hover:bg-surface",
-} as const;
-
-const Button = forwardRef<HTMLButtonElement, Props>(function Button(
-  { className, variant = "primary", size = "md", ...rest }, ref
-) {
   return (
     <button
-      ref={ref}
-      className={clsx(
-        "inline-flex items-center justify-center rounded-2xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
-        sizes[size],
-        variants[variant],
-        className
-      )}
+      className={clsx(base, sizes[size], variants[variant], className)}
       {...rest}
     />
   );
-});
-
-export default Button;
+}

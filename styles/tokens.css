@@ -2,7 +2,8 @@
   /* Cores (claro) inspiradas na Entourage */
   --accent:#00A7DD;
   --bg:#F6F8FB;
-  --card:#FFFFFF;
+  --card:#ffffff;
+  --elev:0 10px 30px rgba(2,32,71,.08);
   --surface: #FAFBFF;
   --text:#0B1524;
   --muted:#667085;
@@ -36,7 +37,7 @@ html,body{ background:var(--bg); color:var(--text); }
 .bg-card{ background:var(--card); }
 .bg-surface{ background:var(--surface); }
 .border{ border:1px solid var(--border-color); }
-.shadow-soft{ box-shadow:0 8px 30px rgba(2,32,71,.08); }
+.shadow-soft { box-shadow: var(--elev); }
 
 /* Utilitários de layout/anim */
 .container-main{ width:100%; max-width:1280px; margin:0 auto; padding:1.25rem; }

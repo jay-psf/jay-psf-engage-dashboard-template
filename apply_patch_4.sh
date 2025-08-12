@@ -1,3 +1,8 @@
+# === Patch: corrige cookie no login + melhora UI ===
+cd /workspaces/jay-psf-engage-dashboard-template || exit 2
+
+# 1) Login: grava cookies no navegador antes de redirecionar
+awk '1' app/login/login-form.tsx > /tmp/login-form.bak && cat > app/login/login-form.tsx <<'TSX'
 "use client";
 import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
@@ -130,3 +135,54 @@ export default function LoginForm() {
     </main>
   );
 }
+TSX
+
+# 2) Botão mais arredondado, sombra e brilho no hover/focus
+awk '1' components/ui/Button.tsx > /tmp/Button.bak && cat > components/ui/Button.tsx <<'TSX'
+"use client";
+import clsx from "clsx";
+
+type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "solid" | "outline";
+  size?: "sm" | "md" | "lg";
+};
+
+export default function Button({ variant="solid", size="md", className, ...rest }: Props) {
+  const base =
+    "inline-flex items-center justify-center rounded-full font-medium transition " +
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--accent)] " +
+    "disabled:opacity-60 disabled:cursor-not-allowed";
+  const sizes = {
+    sm: "h-9 px-4 text-sm",
+    md: "h-11 px-5",
+    lg: "h-12 px-6 text-[15px]",
+  } as const;
+  const variants = {
+    solid:
+      "bg-[var(--accent)] text-white shadow-[0_8px_24px_rgba(16,167,221,.35)] " +
+      "hover:brightness-[1.03] hover:shadow-[0_10px_28px_rgba(16,167,221,.45)] active:brightness-[.98]",
+    outline:
+      "border border-current/15 text-[var(--text)] bg-transparent " +
+      "hover:bg-white/50 dark:hover:bg-white/5",
+  } as const;
+
+  return (
+    <button
+      className={clsx(base, sizes[size], variants[variant], className)}
+      {...rest}
+    />
+  );
+}
+TSX
+
+# 3) Leve melhora de contraste/sombras nos tokens
+applypatch_tokens() {
+  perl -0777 -pe '
+    s/--card:\s*#FFFFFF;/--card:#ffffff;\n  --elev:0 10px 30px rgba(2,32,71,.08);/i;
+    s/\.shadow-soft\s*\{[^\}]*\}/.shadow-soft { box-shadow: var(--elev); }/i;
+  ' -i styles/tokens.css
+}
+applypatch_tokens
+
+# 4) build e push
+pnpm build && git add -A && git commit -m "fix(auth+ui): garante cookies no login e melhora botões/contraste" && git push

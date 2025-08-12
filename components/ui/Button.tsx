@@ -1,23 +1,39 @@
 "use client";
+import { forwardRef } from "react";
 import clsx from "clsx";
-import React from "react";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "solid" | "outline" | "ghost";
-  size?: "md" | "lg";
+  variant?: "primary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
 };
 
-export default function Button({ className, variant="solid", size="md", ...rest }: Props) {
-  const base = "inline-flex items-center justify-center rounded-xl font-medium transition outline-none";
-  const sizes = {
-    md: "h-10 px-4 text-sm",
-    lg: "h-11 px-6 text-base",
-  } as const;
-  const variants = {
-    solid: "bg-[var(--accent)] text-white hover:opacity-90",
-    outline: "border border-border bg-card hover:shadow-soft",
-    ghost: "hover:bg-surface",
-  } as const;
+const sizes = {
+  sm: "h-9 px-3 text-sm",
+  md: "h-11 px-4 text-sm",
+  lg: "h-12 px-6 text-base",
+} as const;
 
-  return <button className={clsx(base, sizes[size], variants[variant], className)} {...rest} />;
-}
+const variants = {
+  primary: "bg-accent text-white hover:opacity-90",
+  outline: "border border-border bg-card hover:shadow-soft",
+  ghost: "hover:bg-surface",
+} as const;
+
+const Button = forwardRef<HTMLButtonElement, Props>(function Button(
+  { className, variant = "primary", size = "md", ...rest }, ref
+) {
+  return (
+    <button
+      ref={ref}
+      className={clsx(
+        "inline-flex items-center justify-center rounded-2xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
+        sizes[size],
+        variants[variant],
+        className
+      )}
+      {...rest}
+    />
+  );
+});
+
+export default Button;

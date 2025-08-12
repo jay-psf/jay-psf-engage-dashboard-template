@@ -1,24 +1,45 @@
-:root {
-  --accent: #00A7DD;
-  --bg: #F6F8FB;
-  --card: #FFFFFF;
-  --border: 1px solid rgba(16,24,40,0.08);
-  --text: #0B1524;
-  --muted: #667085;
+:root{
+  /* Cores (claro) inspiradas na Entourage */
+  --accent:#00A7DD;
+  --bg:#F6F8FB;
+  --card:#FFFFFF;
+  --surface: #FAFBFF;
+  --text:#0B1524;
+  --muted:#667085;
+  --border-color:rgba(16,24,40,0.10);
+
+  /* Tipografia e raios */
+  --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  --font-display: "Sora", var(--font-sans);
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Efeitos */
+  --ring: #00A7DD33;
+  --ring-strong: #00A7DD66;
 }
-:root[data-theme="dark"] {
-  --accent: #00A7DD;
-  --bg: #0B1220;
-  --card: #111827;
-  --text: #E6E8EC;
-  --muted: #9BA3AF;
-  --border: 1px solid rgba(255,255,255,0.08);
+
+:root[data-theme="dark"]{
+  --accent:#00A7DD;
+  --bg:#0B1220;
+  --card:#111827;
+  --surface:#0E1524;
+  --text:#E6E8EC;
+  --muted:#9BA3AF;
+  --border-color:rgba(255,255,255,0.12);
+  --ring:#00A7DD55;
+  --ring-strong:#00A7DD88;
 }
-* { border-color: color-mix(in oklab, currentColor 15%, transparent); }
-html, body { background: var(--bg); color: var(--text); }
-.bg-card { background: var(--card); }
-.bg-surface { background: color-mix(in oklab, var(--card) 80%, var(--bg)); }
-.border { border: var(--border); }
-.text-muted { color: var(--muted); }
-.bg-accent { background: var(--accent); }
-.shadow-soft { box-shadow: 0 8px 30px rgba(2, 32, 71, .08); }
+
+html,body{ background:var(--bg); color:var(--text); }
+.text-muted{ color:var(--muted); }
+.bg-card{ background:var(--card); }
+.bg-surface{ background:var(--surface); }
+.border{ border:1px solid var(--border-color); }
+.shadow-soft{ box-shadow:0 8px 30px rgba(2,32,71,.08); }
+
+/* Utilitários de layout/anim */
+.container-main{ width:100%; max-width:1280px; margin:0 auto; padding:1.25rem; }
+@media (min-width: 768px){ .container-main{ padding:1.5rem; } }
+@keyframes fadeInUp { from{opacity:.01; transform:translateY(6px)} to{opacity:1; transform:none} }
+.fade-in { animation: fadeInUp .28s ease-out both; }

@@ -1,25 +1,34 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "./Button";
+import { useEffect, useState } from "react";
 
-export default function Topbar({ role, brandLogo }: { role: "admin"|"sponsor"; brandLogo?: string }) {
+type Session = { role?: "admin"|"sponsor"; brand?: string; username?: string };
+function readSession(): Session { try { const r=localStorage.getItem("session"); return r? JSON.parse(r):{}; } catch { return {}; } }
+
+export default function Topbar(){
+  const [s,setS] = useState<Session>({});
+  useEffect(()=>{ setS(readSession()); },[]);
+  const isSponsor = s.role==="sponsor";
+  const brand = s.brand || "heineken";
   return (
-    <header className="sticky top-0 z-40 h-16 bg-[var(--bg)]/80 backdrop-blur border-b border-border flex items-center">
-      <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-6">
+    <header className="sticky top-0 z-30 border bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+      <div className="container-main h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {brandLogo ? (
-            <div className="h-8 w-28 relative">
-              <Image src={brandLogo} alt="Logo patrocinador" fill className="object-contain" sizes="112px" />
-            </div>
+          {isSponsor ? (
+            <Image src={`/logos/${brand}.png`} alt={`${brand} logo`} width={120} height={28} className="object-contain" priority />
           ) : (
-            <div className="text-lg font-semibold tracking-tight">Entourage • Engage</div>
+            <Link href="/" className="h-display text-lg">Entourage • Engage</Link>
           )}
         </div>
-        <nav className="flex items-center gap-2">
-          <form action="/api/logout" method="post">
-            <Button type="submit" variant="outline">Sair</Button>
-          </form>
-        </nav>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={()=>{
+            localStorage.removeItem("session");
+            document.documentElement.removeAttribute("data-theme");
+            window.location.href="/login";
+          }}>Sair</Button>
+        </div>
       </div>
     </header>
   );

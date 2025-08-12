@@ -1,19 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const { role, brand } = await req.json();
-
+export async function POST(req: Request) {
+  const { role, brand } = await req.json().catch(() => ({}));
   if (role !== "admin" && role !== "sponsor") {
     return NextResponse.json({ ok: false, error: "invalid role" }, { status: 400 });
   }
-
   const res = NextResponse.json({ ok: true });
-  // 7 dias, httpOnly
-  res.cookies.set("role", role, { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60*60*24*7 });
-  if (role === "sponsor") {
-    res.cookies.set("brand", brand || "heineken", { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60*60*24*7 });
-  } else {
-    res.cookies.set("brand", "", { path: "/", maxAge: 0 });
-  }
+  res.cookies.set("role", role, { httpOnly: false, path: "/" });
+  if (brand) res.cookies.set("brand", brand, { httpOnly: false, path: "/" });
   return res;
 }

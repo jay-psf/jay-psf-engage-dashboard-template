@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* tokens já existem e ficam por último para poderem sobrescrever */
 @import "./tokens.css";
 
-:root, :root[data-theme="dark"] { color-scheme: light dark; }
+/* Variáveis de fonte vindas do app/fonts.ts via className no layout */
+:root { --font-inter: Inter, system-ui, sans-serif; --font-sora: Sora, system-ui, sans-serif; }
+
+/* Font stacks */
+.body-font { font-family: var(--font-inter), system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
+.display-font { font-family: var(--font-sora), var(--font-inter), system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+
+/* Animação suave de entrada */
+@keyframes fadeInUp { from { opacity: .01; transform: translateY(6px) } to { opacity: 1; transform: none } }
+.fade-in { animation: fadeInUp .35s ease-out both; }

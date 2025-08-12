@@ -1,18 +1,21 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Topbar() {
+  const pathname = usePathname();
   return (
-    <header className="h-12 border-b bg-white flex items-center justify-between px-3">
-      <div className="text-sm text-neutral-600">
-        Entourage Engage · Unidade Engage
+    <header className="w-full border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <div className="max-w-screen-2xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="font-semibold">Engage Dashboard</div>
+        <nav className="flex items-center gap-3 text-sm">
+          <span className="text-neutral-500 hidden sm:inline">Rota:</span>
+          <code className="px-2 py-1 bg-neutral-100 rounded">{pathname}</code>
+          <Link href="/login" className="px-3 py-1 border rounded hover:bg-neutral-50">
+            Login
+          </Link>
+        </nav>
       </div>
-      <nav className="flex items-center gap-3">
-        <Link href="/login" className="text-sm underline">Perfil de acesso</Link>
-        <form method="POST" action="/api/logout">
-          <button className="text-sm px-3 py-1 border rounded">Sair</button>
-        </form>
-      </nav>
     </header>
   );
 }

@@ -1,12 +1,18 @@
-export default function Financials() {
+export default function Page({ params }: { params: { brand: string } }) {
+  const brand = params.brand;
   return (
-    <section className="p-4 border rounded bg-white">
-      <h2 className="font-semibold mb-2">Financeiro</h2>
-      <ul className="text-sm text-neutral-700 list-disc pl-5">
-        <li>Receita contratada: R$ 800.000</li>
-        <li>Custos realizados: R$ 420.000</li>
-        <li>Margem estimada: 47,5%</li>
-      </ul>
-    </section>
+    <div className="space-y-6">
+      <header className="flex items-end justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold capitalize">{brand} • Financeiro</h1>
+          <p className="text-muted text-sm mt-1">Faturamento, custos e repasses.</p>
+        </div>
+      </header>
+
+      <section className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        <div className="card"><h3 className="text-base font-medium mb-2">Projeção</h3><p className="text-muted text-sm">Receita prevista vs. realizada.</p></div>
+        <div className="card"><h3 className="text-base font-medium mb-2">Extratos</h3><p className="text-muted text-sm">Pagamentos e notas.</p></div>
+      </section>
+    </div>
   );
 }

@@ -1,38 +1,30 @@
-export default function Page() {
-  const Kpi = ({ title, value }: { title: string; value: string }) => (
-    <div className="rounded-2xl border border-[var(--border)] bg-card p-5 shadow-soft">
-      <p className="text-[12px] uppercase tracking-wide text-[var(--muted)]">{title}</p>
-      <p className="mt-2 text-[26px] font-bold">{value}</p>
-    </div>
-  );
+import KPI from "@/components/ui/KPI";
 
+export default function Page() {
   return (
     <div className="space-y-6">
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Kpi title="Receita acumulada" value="R$ 2.311.674,00" />
-        <Kpi title="Eventos ativos" value="12" />
-        <Kpi title="Leads no funil" value="184" />
-        <Kpi title="Satisfação média" value="4,7/5" />
+      <header className="flex items-end justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">Overview</h1>
+          <p className="text-muted text-sm mt-1">Atalhos e resumos principais.</p>
+        </div>
+      </header>
+
+      <section className="kpi-grid">
+        <KPI label="Receita (YTD)" value="R$ 1,9M" delta={9.7} goodIsUp series={[15,16,18,19,20,22,23,25,26,28,29,31]}/>
+        <KPI label="Patrocinadores ativos" value={12} delta={-3.1} goodIsUp={false} series={[14,14,13,13,12,12,12,12,12,12,12,12]}/>
+        <KPI label="Leads qualificados" value={248} delta={5.2} goodIsUp series={[180,190,195,210,215,220,230,235,240,245,246,248]}/>
+        <KPI label="NPS" value="71" delta={0.6} goodIsUp series={[66,67,68,69,69,70,70,71,71,71,71,71]}/>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div className="rounded-2xl border border-[var(--border)] bg-card p-5 shadow-soft xl:col-span-2">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-[15px] font-semibold">Performance recente</h3>
-            <button className="rounded-full border border-[var(--border)] px-3 py-1.5 text-[13px] hover:bg-cardghost">
-              Ver detalhes
-            </button>
-          </div>
-          <div className="h-[300px] rounded-xl border border-dashed border-[var(--border)] bg-cardghost/40" />
+      <section className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        <div className="card">
+          <h3 className="text-base font-medium mb-2">Atividade recente</h3>
+          <p className="text-muted text-sm">Assinaturas, renovações e interações mais recentes.</p>
         </div>
-
-        <div className="rounded-2xl border border-[var(--border)] bg-card p-5 shadow-soft">
-          <h3 className="mb-3 text-[15px] font-semibold">Próximos marcos</h3>
-          <ul className="space-y-2 text-[14px] text-[var(--text)]/90">
-            <li>Entrega de relatório do Evento X</li>
-            <li>Kickoff com patrocinador ACME</li>
-            <li>Publicação de álbum de fotos</li>
-          </ul>
+        <div className="card">
+          <h3 className="text-base font-medium mb-2">Próximos marcos</h3>
+          <p className="text-muted text-sm">3 entregas esta semana, 2 aprovações pendentes.</p>
         </div>
       </section>
     </div>

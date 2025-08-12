@@ -1,11 +1,19 @@
-export default function Events() {
+export default function Page({ params }: { params: { brand: string } }) {
+  const brand = params.brand;
   return (
-    <section className="p-4 border rounded bg-white">
-      <h2 className="font-semibold mb-2">Agenda de Eventos</h2>
-      <ul className="text-sm text-neutral-700 list-disc pl-5">
-        <li>Festival X — São Paulo — 15/09</li>
-        <li>Show Y — Rio de Janeiro — 22/10</li>
-      </ul>
-    </section>
+    <div className="space-y-6">
+      <header className="flex items-end justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold capitalize">{brand} • Eventos</h1>
+          <p className="text-muted text-sm mt-1">Calendário e execução.</p>
+        </div>
+      </header>
+
+      <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="card"><h3 className="text-base font-medium mb-2">Calendário</h3><p className="text-muted text-sm">Próximas ativações.</p></div>
+        <div className="card"><h3 className="text-base font-medium mb-2">Checklists</h3><p className="text-muted text-sm">Pendências por evento.</p></div>
+        <div className="card"><h3 className="text-base font-medium mb-2">Métricas</h3><p className="text-muted text-sm">KPI por evento.</p></div>
+      </section>
+    </div>
   );
 }

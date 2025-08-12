@@ -1,46 +1,24 @@
 :root {
-  /* Cores base (modo claro) — ajuste depois com os tons oficiais da Entourage */
-  --bg: #f6f8fb;
-  --surface: #ffffff;
-  --card: #ffffff;
-  --border: #e6eaf0;
-  --text: #0f172a;
-  --muted: #64748b;
-
-  /* Acento (inspirado no botão “+” do seu topo) */
-  --accent: #10b5d6;        /* ciano/teal */
-  --accent-strong: #0ea5b6; /* um pouco mais escuro */
-
-  /* Sombras suaves */
-  --shadow: 0 10px 35px rgba(2, 6, 23, 0.06);
-
-  /* Tipografia */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
-  --radius: 16px;
+  --accent: #00A7DD;
+  --bg: #F6F8FB;
+  --card: #FFFFFF;
+  --border: 1px solid rgba(16,24,40,0.08);
+  --text: #0B1524;
+  --muted: #667085;
 }
-
-/* Tema escuro (patrocinador) */
 :root[data-theme="dark"] {
-  --bg: #0b1220;
-  --surface: #0e1626;
-  --card: #111a2c;
-  --border: #1b273d;
-  --text: #e5e7eb;
-  --muted: #93a0b6;
-
-  --accent: #10b5d6;
-  --accent-strong: #1fb6ce;
-
-  --shadow: 0 12px 40px rgba(2, 6, 23, 0.4);
+  --accent: #00A7DD;
+  --bg: #0B1220;
+  --card: #111827;
+  --text: #E6E8EC;
+  --muted: #9BA3AF;
+  --border: 1px solid rgba(255,255,255,0.08);
 }
-
-/* Utilitários globais (usamos nos cartões/botões) */
-:root, [data-theme="dark"] {
-  --ring: 2px solid rgba(16,181,214,.35);
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
-}
+* { border-color: color-mix(in oklab, currentColor 15%, transparent); }
+html, body { background: var(--bg); color: var(--text); }
+.bg-card { background: var(--card); }
+.bg-surface { background: color-mix(in oklab, var(--card) 80%, var(--bg)); }
+.border { border: var(--border); }
+.text-muted { color: var(--muted); }
+.bg-accent { background: var(--accent); }
+.shadow-soft { box-shadow: 0 8px 30px rgba(2, 32, 71, .08); }

@@ -2,56 +2,48 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type Session = { role: "admin" | "sponsor"; brand?: string };
+type Session = { role?: "admin" | "sponsor"; brand?: string };
 
 function readSession(): Session {
-  try {
-    const raw = localStorage.getItem("session");
-    return raw ? JSON.parse(raw) as Session : { role: "admin" };
-  } catch {
-    return { role: "admin" };
-  }
-}
-
-function Item({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="block w-full rounded-xl border border-border bg-surface hover:border-accent/50 hover:shadow-soft px-4 h-11 text-sm flex items-center"
-    >
-      {children}
-    </Link>
-  );
+  try { const raw = localStorage.getItem("session"); return raw ? JSON.parse(raw) : {}; }
+  catch { return {}; }
 }
 
 export default function Sidebar() {
-  const [s, setS] = useState<Session>({ role: "admin" });
+  const [s, setS] = useState<Session>({});
   useEffect(() => setS(readSession()), []);
 
-  const sponsorOnly = [
-    { href: "/sponsor/[brand]/overview", label: "Overview" },
-    { href: "/sponsor/[brand]/results", label: "Resultados" },
-    { href: "/sponsor/[brand]/financials", label: "Financeiro" },
-  ];
+  const isSponsor = s.role === "sponsor";
+  const brand = (s.brand || "acme").toLowerCase();
 
-  const adminOnly = [
+  const adminNav = [
     { href: "/", label: "Dashboard" },
     { href: "/pipeline", label: "Pipeline" },
     { href: "/projetos", label: "Projetos" },
     { href: "/admin", label: "Admin" },
   ];
 
-  const items = s.role === "sponsor" ? sponsorOnly : [...adminOnly, ...sponsorOnly];
+  const sponsorNav = [
+    { href: `/sponsor/${brand}/overview`, label: "Overview" },
+    { href: `/sponsor/${brand}/results`, label: "Resultados" },
+    { href: `/sponsor/${brand}/financials`, label: "Financeiro" },
+  ];
 
-  // Monta path correto quando sponsor (substitui [brand])
-  const brand = (s.brand || "acme").toLowerCase();
+  const items = isSponsor ? sponsorNav : [...adminNav, ...sponsorNav];
 
   return (
-    <aside className="w-64 shrink-0 p-4 space-y-3">
-      {items.map((i) => {
-        const href = i.href.replace("[brand]", brand);
-        return <Item key={i.href} href={href}>{i.label}</Item>;
-      })}
+    <aside className="w-[260px] shrink-0">
+      <nav className="space-y-3">
+        {items.map((i) => (
+          <Link
+            key={i.href}
+            href={i.href}
+            className="block rounded-xl border border-border bg-card px-4 py-3 hover:shadow-soft transition"
+          >
+            {i.label}
+          </Link>
+        ))}
+      </nav>
     </aside>
   );
 }

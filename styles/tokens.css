@@ -1,30 +1,30 @@
 :root{
-  /* Brand */
   --accent:#7E3AF2; --accent-600:#6C2BD9; --accent-700:#5B21B6;
 
   /* Light */
-  --bg:#F6F8FB; --card:#FFFFFF; --surface:#F2F4F9;
-  --text:#0B1524; --muted:#667085; --borderC:rgba(16,24,40,.12);
+  --bg:#F7F9FC; --card:#FFFFFF; --surface:#F2F4F9;
+  --text:#0C1220; --muted:#667085; --borderC:rgba(16,24,40,.12);
 
-  /* Dark */
-  --bg-dark:#0B1220; --card-dark:#0F1627; --surface-dark:#0C1322;
-  --text-dark:#E6E8EC; --muted-dark:#9BA3AF; --borderC-dark:rgba(255,255,255,.10);
+  /* Dark (sólido) */
+  --bg-dark:#0A0D14; --card-dark:#0C111A; --surface-dark:#0B1018;
+  --text-dark:#E8EAF0; --muted-dark:#9AA4B2; --borderC-dark:rgba(255,255,255,.10);
 
-  /* Tipografia (modular scale leve) */
-  --fs-xs:12px; --fs-sm:13.5px; --fs-md:15px; --fs-lg:17px;
-  --fs-h6:18px; --fs-h5:20px; --fs-h4:24px; --fs-h3:28px; --fs-h2:34px; --fs-h1:42px;
+  /* tipografia (um passo menor) */
+  --fs-xs:12px; --fs-sm:13px; --fs-md:14.5px; --fs-lg:16px;
+  --fs-h6:17px; --fs-h5:19px; --fs-h4:22px; --fs-h3:26px; --fs-h2:32px; --fs-h1:38px;
 
-  /* Espaços (8-based com sutilezas) */
+  /* espaçamento (8-based) */
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px;
-  --space-6:24px; --space-7:28px; --space-8:32px; --space-10:40px; --space-12:48px;
+  --space-6:24px; --space-8:32px; --space-10:40px; --space-12:48px;
 
-  /* Container */
   --container: 1200px;
-
-  /* Raio/Sombras */
   --radius:16px; --radius-lg:22px;
-  --elev:0 10px 30px rgba(2,32,71,.08);
-  --elev-dark:0 14px 36px rgba(0,0,0,.35);
+  --elev:0 10px 30px rgba(10,22,50,.08);
+  --elev-dark:0 14px 36px rgba(0,0,0,.45);
+
+  /* halos/glow sutis mas impactantes */
+  --ring:rgba(126,58,242,.35);
+  --ring-strong:rgba(126,58,242,.6);
 }
 
 :root[data-theme="dark"]{

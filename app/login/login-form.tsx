@@ -1,110 +1,136 @@
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 type Role = "admin" | "sponsor";
 
 export default function LoginForm() {
-  const params = useSearchParams();
-  const router = useRouter();
-  const err = params.get("err");
   const [role, setRole] = useState<Role>("admin");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    // preencher exemplo rápido
+    setUsername(role === "admin" ? "admin" : "sponsor");
+    setPassword(role === "admin" ? "123456" : "000000");
+  }, [role]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch("/api/auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    if (!res.ok) {
-      router.push("/login?err=1");
-      return;
-    }
-    const data = await res.json(); // { role, brand }
-    // redireciona conforme o papel
-    if (data.role === "sponsor" && data.brand) {
-      router.push(`/sponsor/${data.brand}/overview`);
-    } else {
-      router.push("/");
+    setLoading(true);
+    setErr("");
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) throw new Error("Usuário ou senha inválidos");
+      const data = await res.json();
+      // redireciona por papel
+      if (data.role === "sponsor") {
+        router.push(`/sponsor/${data.brand || "heineken"}/overview`);
+      } else {
+        router.push("/");
+      }
+    } catch (e: any) {
+      setErr(e.message || "Erro ao entrar");
+    } finally {
+      setLoading(false);
     }
   }
 
-  return (
-    <main className="min-h-[75vh] grid place-items-center px-4">
-      <div className="grid md:grid-cols-2 gap-4 w-full max-w-5xl">
-        <section
-          onClick={() => setRole("admin")}
-          className={`cursor-pointer rounded-2xl border p-5 ${role==="admin"?"ring-2":""}`}
-          style={{background:"var(--panel)",borderColor:"var(--border)",boxShadow:"0 8px 24px rgba(0,0,0,.12)"}}
-        >
-          <div className="text-sm" style={{color:"var(--muted)"}}>Perfil</div>
-          <div className="text-lg font-semibold mt-1">Interno (Admin)</div>
-          <div className="text-sm mt-2" style={{color:"var(--muted)"}}>Acesso a tudo</div>
-        </section>
+  const Card = ({
+    active,
+    title,
+    desc,
+    onClick,
+  }: {
+    active: boolean;
+    title: string;
+    desc: string;
+    onClick: () => void;
+  }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`card block text-left w-full ${active ? "ring-2 ring-[var(--brand-accent)]" : ""}`}
+    >
+      <div className="text-sm" style={{ color: "var(--muted)" }}>Perfil</div>
+      <div className="text-lg font-semibold">{title}</div>
+      <div className="text-sm mt-1" style={{ color: "var(--muted)" }}>{desc}</div>
+    </button>
+  );
 
-        <section
+  return (
+    <div className="max-w-5xl mx-auto grid gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card
+          active={role === "admin"}
+          title="Interno (Admin)"
+          desc="Acesso a tudo"
+          onClick={() => setRole("admin")}
+        />
+        <Card
+          active={role === "sponsor"}
+          title="Patrocinador"
+          desc="Acesso ao próprio contrato"
           onClick={() => setRole("sponsor")}
-          className={`cursor-pointer rounded-2xl border p-5 ${role==="sponsor"?"ring-2":""}`}
-          style={{background:"var(--panel-2)",borderColor:"var(--border)",boxShadow:"0 8px 24px rgba(0,0,0,.12)"}}
-        >
-          <div className="text-sm" style={{color:"var(--muted)"}}>Perfil</div>
-          <div className="text-lg font-semibold mt-1">Patrocinador</div>
-          <div className="text-sm mt-2" style={{color:"var(--muted)"}}>Acesso ao próprio contrato</div>
-        </section>
+        />
       </div>
 
-      <form onSubmit={onSubmit} className="w-full max-w-5xl mt-6 rounded-2xl border p-6"
-        style={{background:"var(--panel)",borderColor:"var(--border)"}}>
-        {err && (
-          <div className="mb-4 rounded-xl px-3 py-2 text-sm" style={{background:"#2d1b1b",color:"#fecaca",border:"1px solid #7f1d1d"}}>
-            Usuário ou senha inválidos.
-          </div>
-        )}
+      <form onSubmit={onSubmit} className="card">
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm block mb-2" style={{color:"var(--muted)"}}>Usuário</label>
+          <label className="w-full">
+            <div className="label">Usuário</div>
             <input
+              className="input"
               value={username}
-              onChange={(e)=>setUsername(e.target.value)}
-              placeholder={role==="sponsor"?"sponsor":"admin"}
-              className="w-full rounded-xl px-3 py-2 outline-none"
-              style={{background:"transparent",border:"1px solid var(--border)",color:"var(--text)"}}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder={role === "admin" ? "admin" : "sponsor"}
+              autoComplete="username"
             />
-          </div>
-          <div>
-            <label className="text-sm block mb-2" style={{color:"var(--muted)"}}>Senha</label>
+          </label>
+
+          <label className="w-full">
+            <div className="label">Senha</div>
             <input
+              className="input"
               type="password"
               value={password}
-              onChange={(e)=>setPassword(e.target.value)}
-              placeholder={role==="sponsor"?"000000":"123456"}
-              className="w-full rounded-xl px-3 py-2 outline-none"
-              style={{background:"transparent",border:"1px solid var(--border)",color:"var(--text)"}}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder={role === "admin" ? "123456" : "000000"}
+              autoComplete="current-password"
             />
-          </div>
+          </label>
         </div>
+
+        {err && <div className="mt-3 text-sm" style={{ color: "salmon" }}>{err}</div>}
 
         <div className="mt-5 flex items-center gap-3">
           <button
             type="submit"
-            className="px-5 py-2 rounded-2xl font-semibold shadow"
-            style={{background:"var(--brand-accent)",color:"var(--brand-contrast)",boxShadow:"0 8px 24px rgba(0,0,0,.18)"}}
+            disabled={loading}
+            className="btn-primary"
           >
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </button>
+
           <button
             type="button"
-            onClick={()=>{ setUsername(role==="sponsor"?"sponsor":"admin"); setPassword(role==="sponsor"?"000000":"123456"); }}
-            className="px-4 py-2 rounded-2xl border"
-            style={{borderColor:"var(--border)",color:"var(--text)"}}
+            className="btn-ghost"
+            onClick={() => {
+              setUsername(role === "admin" ? "admin" : "sponsor");
+              setPassword(role === "admin" ? "123456" : "000000");
+            }}
           >
             Preencher exemplo
           </button>
         </div>
       </form>
-    </main>
+    </div>
   );
 }

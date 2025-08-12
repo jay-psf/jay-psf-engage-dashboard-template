@@ -1,9 +1,9 @@
 import "../styles/globals.css";
 import "../styles/tokens.css";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Sidebar from "@/components/ui/Sidebar";
 import Topbar from "@/components/ui/Topbar";
-import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Engage Dashboard",
@@ -11,17 +11,25 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const role = cookies().get("role")?.value || "admin";
-  const brand = cookies().get("brand")?.value || "";
+  const cookieStore = cookies();
+  const role = (cookieStore.get("role")?.value as "admin" | "sponsor") || "admin";
+  const brand = cookieStore.get("brand")?.value || "";
+
   const themeClass = role === "sponsor" ? "theme-sponsor" : "theme-admin";
 
   return (
-    <html lang="pt-BR" className={themeClass}>
-      <body className="font-sans" data-role={role} data-brand={brand}>
-        <Topbar />
-        <div className="min-h-screen max-w-screen-2xl mx-auto px-4 py-6 flex gap-6">
+    <html lang="pt-BR">
+      <body
+        className={`${themeClass}`}
+        data-role={role}
+        data-brand={brand}
+      >
+        <div className="min-h-screen flex">
           <Sidebar />
-          <main className="flex-1 grid gap-6">{children}</main>
+          <div className="flex-1 flex flex-col">
+            <Topbar />
+            <main className="p-6">{children}</main>
+          </div>
         </div>
       </body>
     </html>

@@ -2,87 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-feature-settings: "liga" 1, "calt" 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); }
 
-/* Cards */
+.label { font-size: .875rem; color: var(--muted); margin-bottom: .25rem; }
 .card {
-  @apply rounded-2xl border transition;
   background: var(--panel);
-  border-color: var(--border);
-  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.06));
-}
-.card:hover { background: var(--card-hover); }
-
-/* Botões */
-.btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition;
   border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
 }
-.btn:disabled { opacity: .6; cursor: not-allowed; }
+.input {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+}
+.input::placeholder { color: var(--muted); }
+.input:focus { border-color: var(--brand-accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-accent) 30%, transparent); }
 
 .btn-primary {
-  color: var(--brand-contrast);
-  background: linear-gradient(180deg, var(--brand-accent) 0%, var(--brand-accent-600) 100%);
-  border-color: rgba(0,0,0,.06);
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 16px; border-radius: 999px;
+  background: var(--brand-accent); color: var(--brand-contrast);
+  border: 1px solid color-mix(in oklab, var(--brand-accent) 75%, black);
 }
 .btn-primary:hover { filter: brightness(1.05); }
 
-.btn-outline {
-  background: transparent;
-  color: var(--text);
-  border-color: var(--border);
-}
-.btn-outline:hover { background: color-mix(in oklab, var(--panel) 92%, black 8%); }
-
-/* Inputs */
-.input {
-  @apply w-full rounded-xl border px-3 py-2 bg-transparent outline-none;
-  border-color: var(--border);
-}
-.input:focus {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
-  border-color: var(--ring);
-}
-
-/* Badges */
-.badge {
-  @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium border;
-  border-color: var(--border);
-  background: color-mix(in oklab, var(--panel) 92%, black 8%);
-}
-
-/* Tabelas */
-.table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
+.btn-ghost {
+  padding: 10px 16px; border-radius: 999px;
+  background: transparent; color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 12px;
 }
-.table thead th {
-  text-align: left;
-  font-size: .75rem;
-  letter-spacing: .02em;
-  color: var(--muted);
-  background: color-mix(in oklab, var(--panel) 96%, black 4%);
-  padding: .75rem 1rem;
-  border-bottom: 1px solid var(--border);
-}
-.table tbody td {
-  padding: .9rem 1rem;
-  border-bottom: 1px solid var(--border);
-}
-.table tbody tr:last-child td { border-bottom: 0; }
 
-/* util */
-.hr { height:1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,.14), transparent); }
-.section { @apply grid gap-4; }
+a { color: inherit; }

@@ -1,61 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Topbar from "@/components/ui/Topbar";
-import Sidebar from "@/components/ui/Sidebar";
-import { readCookie } from "@/components/lib/session";
+import { readSession } from "@/components/lib/session";
 
-type ThemePref = "light" | "dark" | "system";
-
-function resolveTheme(pref: ThemePref, fallbackByRole?: "light"|"dark") {
-  if (pref === "system") {
-    const m = window.matchMedia("(prefers-color-scheme: dark)");
-    return m.matches ? "dark" : "light";
-  }
-  return pref || fallbackByRole || "light";
-}
-
-export default function ClientShell({ children }: { children: React.ReactNode }) {
+export default function ClientShell({ children }:{children:React.ReactNode}){
   const pathname = usePathname();
   const isLogin = pathname === "/login";
+  const { role } = readSession();
 
-  // preferencia do usuário (localStorage)
-  const [pref, setPref] = useState<ThemePref>("system");
+  if (typeof window !== "undefined") {
+    const pref = localStorage.getItem("theme-pref");
+    const html = document.documentElement;
+    if (pref === "light" || pref === "dark") html.setAttribute("data-theme", pref);
+    else {
+      const sys = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light";
+      html.setAttribute("data-theme", role === "sponsor" ? "dark" : sys);
+    }
+  }
 
-  useEffect(() => {
-    const stored = (localStorage.getItem("theme") as ThemePref) || "system";
-    setPref(stored);
-
-    const apply = () => {
-      // papel ainda define fallback: sponsor = dark, admin = light (se system)
-      const role = readCookie("role") as "sponsor"|"admin"|undefined;
-      const fallback = role === "sponsor" ? "dark" : "light";
-      const theme = resolveTheme(stored, fallback);
-      const html = document.documentElement;
-      if (theme === "dark") html.setAttribute("data-theme", "dark");
-      else html.removeAttribute("data-theme");
-    };
-
-    apply();
-
-    // atualiza se o sistema mudar quando pref=system
-    const m = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      const current = (localStorage.getItem("theme") as ThemePref) || "system";
-      if (current === "system") apply();
-    };
-    m.addEventListener?.("change", onChange);
-    return () => m.removeEventListener?.("change", onChange);
-  }, []);
-
-  if (isLogin) return <main className="min-h-[calc(100vh-64px)]">{children}</main>;
-
+  if (isLogin) return <>{children}</>;
   return (
     <>
-      <Topbar />
-      <div className="mx-auto grid max-w-screen-2xl grid-cols-[260px,1fr] gap-6 p-6">
-        <Sidebar />
-        <main className="min-h-[70vh] animate-[fadeIn_.3s_ease]">{children}</main>
+      <Topbar/>
+      <div className="mx-auto max-w-screen-2xl px-4 py-6">
+        <main className="min-h-[70vh]">{children}</main>
       </div>
     </>
   );

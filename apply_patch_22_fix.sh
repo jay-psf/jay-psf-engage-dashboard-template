@@ -1,3 +1,7 @@
+set -euo pipefail
+echo "== Patch 22 (fix): corrige Topbar e recompila =="
+
+cat > components/ui/Topbar.tsx <<'TSX'
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -102,3 +106,8 @@ export default function Topbar() {
     </header>
   );
 }
+TSX
+
+echo "== Build =="
+pnpm build
+echo "✅ Patch 22 (fix) aplicado."

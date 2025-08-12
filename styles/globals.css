@@ -1,105 +1,28 @@
-@import "./ux.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "./tokens.css";
-
-/* Cards */
-.card{
-  @apply rounded-2xl border shadow-soft;
-  background: var(--card);
+@layer base{
+  :root{ color-scheme: light dark; }
+  *{ box-sizing:border-box; }
 }
 
-/* Botões */
-.btn{
-  display:inline-flex;align-items:center;gap:.6rem;justify-content:center;
-  height:44px;padding:0 18px;border-radius:16px;font-weight:700;
-  border:1px solid var(--borderC);background:var(--accent);color:#fff;
-  box-shadow:var(--shadow);transition:filter .15s ease, transform .06s ease;
-}
-.btn:hover{filter:brightness(.98)}
-.btn:active{transform:translateY(1px)}
-.btn-outline{
-  background:var(--surface);color:var(--text);
-  border:1px solid var(--borderC);box-shadow:none;
-}
-
-/* Nave lateral – botões “pill” */
-.nav-pill{
-  display:flex;align-items:center;gap:.6rem;height:54px;
-  padding:0 16px;border-radius:18px;border:1px solid var(--borderC);
-  background: var(--surface); font-weight:600;
-  transition:background .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
-.nav-pill:hover{box-shadow:var(--shadow);border-color:var(--accent)}
-
-/* Topbar */
-.topbar{
-  position:sticky;top:0;z-index:40;
-  backdrop-filter:saturate(1.2) blur(8px);
-  border-bottom:1px solid var(--borderC);
-  background:color-mix(in srgb, var(--surface) 92%, transparent);
+@layer components{
+  .btn{
+    height:40px; border-radius:18px; padding:0 14px;
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--borderC);
+    background:var(--card); color:var(--text);
+    transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .btn:hover{ box-shadow: var(--halo); transform: translateY(-1px) scale(1.01); }
+  .btn:active{ transform: translateY(1px) scale(.99); }
+  .btn-primary{ background: var(--accent); border-color:transparent; color:#fff; }
+  .btn-primary:hover{ box-shadow: var(--halo-strong); }
+  .btn-outline{ background:transparent; }
+  .card{ background:var(--card); border:1px solid var(--borderC); border-radius:20px; box-shadow:var(--elev); }
 }
 
-/* Pill de identidade / perfil */
-.brand-pill{
-  display:inline-flex;align-items:center;gap:.6rem;
-  height:40px;padding:0 12px;border-radius:999px;border:1px solid var(--borderC);
-  background:var(--card);color:var(--text);
-  transition:box-shadow .15s, transform .06s;
-}
-.brand-pill:hover{box-shadow:var(--shadow)}
-.brand-pill:active{transform:translateY(1px)}
-.brand-pill .logo{
-  width:22px;height:22px;border-radius:6px;object-fit:contain;background:#111;
-}
-
-/* Util */
-.kbd{border:1px solid var(--borderC);padding:.15rem .4rem;border-radius:8px;background:var(--surface)}
-
-/* ====== PATCH 16 ====== */
-
-/* Glow no hover de botões clicáveis */
-button, 
-a.btn, 
-.button, 
-[role="button"],
-.card:hover {
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-button:hover,
-a.btn:hover,
-.button:hover,
-[role="button"]:hover {
-  box-shadow: 0 0 0 3px var(--accent-600), 0 0 12px var(--accent);
-  transform: translateY(-1px);
-}
-
-/* Microanimação para cards na entrada */
-.card {
-  animation: fadeInUp 0.4s ease forwards;
-  opacity: 0;
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Microanimação em links de navegação */
-nav a {
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-/* ====== Grids mais fluidos ====== */
-.kpi-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-.responsive-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+@layer utilities{
+  .fade-in{ animation: fadeIn .25s ease forwards; }
 }

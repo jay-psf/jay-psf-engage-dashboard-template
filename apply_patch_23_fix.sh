@@ -1,3 +1,7 @@
+set -euo pipefail
+echo "== Patch 23-fix: Button com size lg =="
+
+cat > components/ui/Button.tsx <<'TSX'
 "use client";
 import clsx from "clsx";
 
@@ -15,3 +19,8 @@ export default function Button({ variant="primary", size="md", className, ...res
     "h-10 px-4";
   return <button {...rest} className={clsx(base, v, s, className)} />;
 }
+TSX
+
+echo "== Build =="
+pnpm build
+echo "✅ Button atualizado para size='lg'."

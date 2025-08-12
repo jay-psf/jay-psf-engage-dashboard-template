@@ -1,3 +1,8 @@
+set -euo pipefail
+echo "== Patch 23: halo forte, press/hover-lift, bg gradiente e Skeleton =="
+
+# 1) Tokens: halos, elevações e keyframes
+cat > styles/tokens.css <<'CSS'
 :root{
   /* Brand / Accent (roxo) */
   --accent:#7E3AF2; --accent-600:#6C2BD9; --accent-700:#5B21B6;
@@ -91,3 +96,66 @@ html,body{
   transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
 .input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(126,58,242,.25); }
+CSS
+
+# 2) Utilitários globais (garante import dos tokens)
+cat > styles/globals.css <<'CSS'
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+  :root{ color-scheme: light dark; }
+  *{ box-sizing:border-box; }
+}
+
+@layer components{
+  .btn{
+    height:40px; border-radius:18px; padding:0 14px;
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--borderC);
+    background:var(--card); color:var(--text);
+    transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .btn:hover{ box-shadow: var(--halo); transform: translateY(-1px) scale(1.01); }
+  .btn:active{ transform: translateY(1px) scale(.99); }
+  .btn-primary{ background: var(--accent); border-color:transparent; color:#fff; }
+  .btn-primary:hover{ box-shadow: var(--halo-strong); }
+  .btn-outline{ background:transparent; }
+  .card{ background:var(--card); border:1px solid var(--borderC); border-radius:20px; box-shadow:var(--elev); }
+}
+
+@layer utilities{
+  .fade-in{ animation: fadeIn .25s ease forwards; }
+}
+CSS
+
+# 3) Button.tsx: usa hover glow/press
+cat > components/ui/Button.tsx <<'TSX'
+"use client";
+import clsx from "clsx";
+
+type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "primary" | "outline";
+  size?: "sm" | "md";
+};
+
+export default function Button({ variant="primary", size="md", className, ...rest }: Props){
+  const base = "btn glow-hover pressable";
+  const v = variant === "primary" ? "btn-primary" : "btn-outline";
+  const s = size === "sm" ? "h-9 px-3 text-sm" : "h-10 px-4";
+  return <button {...rest} className={clsx(base, v, s, className)} />;
+}
+TSX
+
+# 4) Skeleton component (opcional usar nas telas)
+mkdir -p components/ui
+cat > components/ui/Skeleton.tsx <<'TSX'
+export default function Skeleton({ className="" }: { className?: string }){
+  return <span className={`skeleton ${className}`} />;
+}
+TSX
+
+echo "== Build =="
+pnpm build
+echo "✅ Patch 23 aplicado."

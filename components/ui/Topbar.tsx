@@ -1,90 +1,44 @@
 "use client";
-import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { readSession } from "@/components/lib/session";
 
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  const pathname = usePathname();
-  const active = pathname === href;
-  return (
-    <Link
-      href={href}
-      className={
-        "rounded-xl px-3 py-2 text-sm transition-colors " +
-        (active
-          ? "bg-[var(--surface)] text-[var(--text)]"
-          : "text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)]")
-      }
-    >
-      {children}
-    </Link>
-  );
-}
-
-export default function Topbar() {
+export default function Topbar(){
   const { role, brand } = readSession();
-  const brandLogo = brand ? `/logos/${brand}.png` : undefined;
+  const pathname = usePathname();
+
+  const onLogout = async ()=>{
+    try{
+      await fetch("/api/logout", { method:"POST" });
+    }catch{}
+    window.location.href = "/login";
+  };
+
+  // Logo só quando sponsor
+  const showBrand = role === "sponsor" && brand;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--borderC)] bg-[var(--bg)]/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4">
+    <header className="sticky top-0 z-30 bg-[var(--bg)]/85 backdrop-blur border-b border-border">
+      <div className="mx-auto max-w-screen-2xl flex items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-3">
-          <Link href={role === "sponsor" && brand ? `/sponsor/${brand}/overview` : "/"} className="text-base font-semibold">
-            Engage
-          </Link>
-
-          {/* Navegação primária */}
-          {role === "admin" ? (
-            <nav className="ml-2 hidden gap-1 md:flex">
-              <NavLink href="/">Overview</NavLink>
-              <NavLink href="/pipeline">Pipeline</NavLink>
-              <NavLink href="/projetos">Projetos</NavLink>
-              <NavLink href="/settings">Settings</NavLink>
-            </nav>
-          ) : role === "sponsor" && brand ? (
-            <nav className="ml-2 hidden gap-1 md:flex">
-              <NavLink href={`/sponsor/${brand}/overview`}>Overview</NavLink>
-              <NavLink href={`/sponsor/${brand}/results`}>Resultados</NavLink>
-              <NavLink href={`/sponsor/${brand}/financials`}>Financeiro</NavLink>
-              <NavLink href={`/sponsor/${brand}/events`}>Eventos</NavLink>
-              <NavLink href={`/sponsor/${brand}/assets`}>Assets</NavLink>
-              <NavLink href={`/sponsor/${brand}/settings`}>Settings</NavLink>
-            </nav>
-          ) : null}
+          <div className="w-8 h-8 rounded-full bg-[var(--card)] grid place-items-center border border-border">
+            <span className="text-sm font-semibold">E</span>
+          </div>
+          <span className="font-semibold">Engage</span>
         </div>
 
-        {/* Lado direito: chip de perfil (só logo para sponsor) + logout */}
-        <div className="flex items-center gap-3">
-          {role === "sponsor" && brandLogo ? (
-            <Link
-              href={`/sponsor/${brand}/settings`}
-              className="flex items-center gap-2 rounded-full border border-[var(--borderC)] bg-[var(--card)] px-2 py-1 shadow-soft"
-              title="Configurações"
-            >
-              <img
-                src={brandLogo}
-                alt={brand ?? "brand"}
-                width="50"
-                height="50"
-                style={{ display: "block", borderRadius: 10 }}
+        <div className="flex items-center gap-2">
+          {showBrand && (
+            <span className="inline-flex items-center h-10 rounded-full border border-border bg-[var(--card)] px-3">
+              <Image
+                alt={brand!}
+                src={`/logos/${brand!.toLowerCase()}.png`}
+                width={48} height={48}
+                style={{borderRadius:8, display:"block"}}
               />
-            </Link>
-          ) : (
-            <Link
-              href="/settings"
-              className="rounded-full border border-[var(--borderC)] bg-[var(--card)] px-3 py-1.5 text-sm shadow-soft"
-            >
-              Perfil
-            </Link>
+            </span>
           )}
-
-          <form method="post" action="/api/logout" className="hidden md:block">
-            <button
-              className="rounded-xl border border-[var(--borderC)] bg-[var(--surface)] px-3 py-1.5 text-sm hover:shadow-soft transition"
-            >
-              Sair
-            </button>
-          </form>
+          <button onClick={onLogout} className="btn btn-outline">Sair</button>
         </div>
       </div>
     </header>

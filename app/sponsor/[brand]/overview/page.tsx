@@ -18,7 +18,7 @@ export default function Page({ params }: { params: { brand: string } }) {
         <KPI label="ROI estimado" value="2,7x" delta={0.4} goodIsUp series={[1.8,1.9,2.0,2.1,2.2,2.4,2.5,2.7]} />
       </section>
 
-      <section className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+      <section className="grid gap-4 responsive-grid">
         <div className="card">
           <h3 className="text-base font-medium mb-2">Eventos ativos</h3>
           <p className="text-muted text-sm">Links rápidos para relatórios por evento.</p>

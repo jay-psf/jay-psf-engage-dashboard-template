@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { brand: string } }) {
         </div>
       </header>
 
-      <section className="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+      <section className="grid gap-4 responsive-grid xl:grid-cols-3">
         <div className="card"><h3 className="text-base font-medium mb-2">Alcance</h3><p className="text-muted text-sm">Resumo por campanha.</p></div>
         <div className="card"><h3 className="text-base font-medium mb-2">Conversões</h3><p className="text-muted text-sm">Taxas e funis.</p></div>
         <div className="card"><h3 className="text-base font-medium mb-2">Brand lift</h3><p className="text-muted text-sm">Awareness, recall etc.</p></div>

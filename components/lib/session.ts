@@ -12,9 +12,9 @@ export function readCookie(name: string): string | undefined {
 }
 
 export function readSession(): Session {
-  if (typeof document === "undefined") return {};
-  const role = readCookie("role") as Role | undefined;
-  const brand = readCookie("brand");
-  const username = readCookie("username");
-  return { role, brand, username };
+  return {
+    role: (readCookie("role") as Role | undefined),
+    brand: readCookie("brand") || undefined,
+    username: readCookie("username") || undefined,
+  };
 }

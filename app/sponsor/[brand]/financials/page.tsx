@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { brand: string } }) {
         </div>
       </header>
 
-      <section className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+      <section className="grid gap-4 responsive-grid">
         <div className="card"><h3 className="text-base font-medium mb-2">Projeção</h3><p className="text-muted text-sm">Receita prevista vs. realizada.</p></div>
         <div className="card"><h3 className="text-base font-medium mb-2">Extratos</h3><p className="text-muted text-sm">Pagamentos e notas.</p></div>
       </section>

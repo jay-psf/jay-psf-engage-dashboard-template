@@ -57,3 +57,49 @@
 
 /* Util */
 .kbd{border:1px solid var(--borderC);padding:.15rem .4rem;border-radius:8px;background:var(--surface)}
+
+/* ====== PATCH 16 ====== */
+
+/* Glow no hover de botões clicáveis */
+button, 
+a.btn, 
+.button, 
+[role="button"],
+.card:hover {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+button:hover,
+a.btn:hover,
+.button:hover,
+[role="button"]:hover {
+  box-shadow: 0 0 0 3px var(--accent-600), 0 0 12px var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Microanimação para cards na entrada */
+.card {
+  animation: fadeInUp 0.4s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Microanimação em links de navegação */
+nav a {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* ====== Grids mais fluidos ====== */
+.kpi-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}

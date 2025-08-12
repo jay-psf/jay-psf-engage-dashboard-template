@@ -1,5 +1,5 @@
-import "./styles/globals.css";
-import "./styles/tokens.css";
+import "../styles/globals.css";
+import "../styles/tokens.css";
 import { cookies } from "next/headers";
 import ClientShell from "@/components/ClientShell";
 import type { Role } from "@/components/lib/types";

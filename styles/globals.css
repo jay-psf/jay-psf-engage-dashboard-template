@@ -4,4 +4,21 @@
 
 @import "./tokens.css";
 
+/* Acessibilidade de tema para browser */
 :root, :root[data-theme="dark"] { color-scheme: light dark; }
+
+/* Botões base usados no projeto (classe .btn) */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:44px;padding:0 16px;border-radius:14px;font-weight:600;
+  border:1px solid var(--borderC);background:var(--accent);color:white;
+  box-shadow:var(--elev);transition:opacity .15s ease, transform .06s ease;
+}
+.btn:disabled{opacity:.6}
+.btn:hover{opacity:.95}
+.btn:active{transform:translateY(1px)}
+
+.btn-outline{
+  background:var(--card);color:var(--text);
+  border:1px solid var(--borderC);box-shadow:none;
+}

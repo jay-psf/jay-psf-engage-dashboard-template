@@ -1,14 +1,13 @@
 :root{
   /* Light (admin) */
   --accent:#00A7DD;
-  --bg:#F5F7FA;
+  --bg:#F6F8FB;
   --card:#FFFFFF;
   --surface:#F9FBFF;
   --text:#0B1524;
   --muted:#667085;
-  --borderC:rgba(16,24,40,.10);
+  --borderC:rgba(16,24,40,0.10);
   --ring:rgba(0,167,221,.35);
-
   --radius:16px;
   --radius-lg:20px;
   --elev:0 10px 30px rgba(2,32,71,.08);
@@ -21,61 +20,30 @@
   --surface:#0C1322;
   --text:#E6E8EC;
   --muted:#9BA3AF;
-  --borderC:rgba(255,255,255,.10);
+  --borderC:rgba(255,255,255,0.10);
   --ring:rgba(0,167,221,.50);
   --elev:0 14px 36px rgba(0,0,0,.35);
 }
 
 /* Base */
-html,body{background:var(--bg);color:var(--text);}
+html,body{background:var(--bg);color:var(--text)}
 
-/* Utilitárias simples */
-.bg-card{background:var(--card);}
-.bg-surface{background:var(--surface);}
-.text-muted{color:var(--muted);}
-.border{border:1px solid var(--borderC);}
-.border-border{border-color:var(--borderC);}
-.rounded-xl{border-radius:var(--radius);}
-.rounded-2xl{border-radius:var(--radius-lg);}
-.shadow-soft{box-shadow:var(--elev);}
-
-/* Inputs */
-.input{
-  height:48px;width:100%;
-  border:1px solid var(--borderC);
-  background:var(--surface);
-  border-radius:14px;
-  padding:0 12px;
-  outline:0;
-  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
-}
-.input:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 4px var(--ring);
-}
-
-/* Botões base (fallback sem Tailwind) */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  gap:8px;height:44px;padding:0 18px;border-radius:9999px;
-  border:1px solid transparent;cursor:pointer;
-  background:var(--accent);color:white;font-weight:600;
-  transition:transform .06s ease, box-shadow .15s ease, opacity .15s ease;
-  box-shadow:0 6px 18px rgba(0,167,221,.25);
-}
-.btn:hover{opacity:.95;}
-.btn:active{transform:translateY(1px);}
-.btn-outline{
-  background:transparent;color:var(--text);border-color:var(--borderC);
-  box-shadow:none;
-}
-.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+/* Helpers */
+.bg-card{background:var(--card)}
+.bg-surface{background:var(--surface)}
+.text-muted{color:var(--muted)}
+.border{border:1px solid var(--borderC)}
+.border-border{border-color:var(--borderC)}
+.rounded-xl{border-radius:var(--radius)}
+.rounded-2xl{border-radius:var(--radius-lg)}
+.shadow-soft{box-shadow:var(--elev)}
 
 /* Inputs util */
-.input {
-  height: 44px;
-  width: 100%;
-  border: 1px solid var(--borderC, rgba(16,24,40,0.10));
-  background: var(--surface, #F9FBFF);
-  padding: 0 12px;
+.input{
+  height:44px;width:100%;
+  border:1px solid var(--borderC);
+  background:var(--surface);
+  padding:0 12px;border-radius:12px;
+  outline:none;transition:box-shadow .15s ease, border-color .15s ease;
 }
+.input:focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--accent)}

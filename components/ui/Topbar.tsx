@@ -1,43 +1,43 @@
-"use client";
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { cookies } from "next/headers";
 
 export default function Topbar() {
-  const [role, setRole] = useState<"admin"|"sponsor">("admin");
-  const [brand, setBrand] = useState("");
-
-  useEffect(() => {
-    const b = document.body;
-    setRole((b.dataset.role as any) || "admin");
-    setBrand(b.dataset.brand || "");
-  }, []);
-
-  // simples mapeamento de arquivo por marca
-  const brandSrc =
-    role === "sponsor" && brand
-      ? (brand === "heineken" ? "/logos/heineken.jpeg" : `/logos/${brand}.svg`)
-      : null;
+  const c = cookies();
+  const role = c.get("role")?.value || "guest";
+  const brand = c.get("brand")?.value || "";
+  const brandName = brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : "";
 
   return (
-    <header className="sticky top-0 z-40 w-full"
-      style={{ background:"rgba(10,14,26,.75)", backdropFilter:"saturate(160%) blur(8px)", borderBottom:"1px solid var(--border)" }}>
-      <div className="max-w-screen-2xl mx-auto px-4 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-20 border-b border-entourage-line-light/70 bg-entourage-surface-light/90 backdrop-blur dark:bg-entourage-surface-dark/60 dark:border-entourage-line-dark/70">
+      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-3 h-3 rounded" style={{ background:"var(--brand-accent)" }} />
+          <div className="h-7 w-7 rounded-md bg-entourage-primary/90" />
           <span className="font-semibold">Engage Dashboard</span>
         </div>
 
         <div className="flex items-center gap-3">
-          {brandSrc ? (
-            <img src={brandSrc} alt={brand} className="h-7 rounded-lg border" style={{ borderColor:"var(--border)" }}/>
-          ) : (
-            <span className="px-3 py-1 rounded-full text-sm"
-              style={{ background:"var(--panel)", border:"1px solid var(--border)", color:"var(--text)" }}>
-              Engage (interno)
-            </span>
+          {role === "sponsor" && (
+            <div className="flex items-center gap-3">
+              {/* Se existir o arquivo em /public/brands/<brand>.png ele aparece; senão, mostra só o nome */}
+              <div className="relative h-8 w-28">
+                <Image
+                  src={`/brands/${brand}.png`}
+                  alt={brandName || "Marca"}
+                  fill
+                  className="object-contain"
+                  sizes="112px"
+                  onError={() => {}}
+                />
+              </div>
+              <span className="text-sm opacity-80">{brandName}</span>
+            </div>
           )}
-          <Link href="/api/logout" className="px-3 py-1 rounded-full text-sm"
-            style={{ background:"transparent", border:"1px solid var(--border)", color:"var(--text)" }}>
+
+          <Link
+            href="/api/logout"
+            className="rounded-pill bg-transparent border px-3 py-1.5 text-sm border-entourage-line-light hover:bg-entourage-line-light/40 transition dark:border-entourage-line-dark dark:hover:bg-entourage-line-dark/40"
+          >
             Sair
           </Link>
         </div>

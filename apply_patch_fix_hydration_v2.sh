@@ -1,3 +1,7 @@
+set -euo pipefail
+echo "== Fix hydration v2: estrutura estável (Topbar + main SEMPRE) =="
+
+cat > components/ClientShell.tsx <<'TSX'
 "use client";
 
 import { ReactNode, useEffect, useMemo } from "react";
@@ -43,3 +47,8 @@ export default function ClientShell({ children }: { children: ReactNode }) {
     </>
   );
 }
+TSX
+
+echo "== Limpa cache e recompila =="
+rm -rf .next .turbo .vercel/output tsconfig.tsbuildinfo
+pnpm build

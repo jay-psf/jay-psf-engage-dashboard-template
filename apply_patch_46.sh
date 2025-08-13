@@ -1,3 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "== Patch 46: next/image nos logos + RoleSwitch sem warning + respiro no conteúdo =="
+
+# --- 1) Topbar: usa next/image e cliques corretos ---
+mkdir -p components/ui
+cat > components/ui/Topbar.tsx <<'TSX'
 "use client";
 
 import Link from "next/link";
@@ -87,3 +94,86 @@ export default function Topbar(){
     </header>
   );
 }
+TSX
+
+# --- 2) RoleSwitch: corrige useEffect/dep e remove warnings ---
+mkdir -p components/ui
+cat > components/ui/RoleSwitch.tsx <<'TSX'
+"use client";
+import { useEffect, useState, useCallback } from "react";
+import clsx from "clsx";
+
+type Props = {
+  value?: "admin" | "sponsor";
+  onChange?: (r: "admin" | "sponsor") => void;
+  className?: string;
+};
+
+export default function RoleSwitch({ value="admin", onChange, className }: Props){
+  const [role, setRole] = useState<"admin"|"sponsor">(value);
+  const onChangeCb = useCallback((r: "admin"|"sponsor") => { onChange?.(r); }, [onChange]);
+
+  useEffect(() => { onChangeCb(role); }, [role, onChangeCb]);
+
+  return (
+    <div className={clsx("pill lumen w-[360px] h-14 p-1 flex items-center gap-1", className)}>
+      <button
+        className={clsx(
+          "flex-1 h-12 rounded-[12px] transition",
+          role === "admin" ? "bg-[var(--accent)] text-white shadow-[var(--halo)]" : "text-[var(--text)] hover:bg-[var(--surface)]"
+        )}
+        onClick={() => setRole("admin")}
+      >
+        Admin
+      </button>
+      <button
+        className={clsx(
+          "flex-1 h-12 rounded-[12px] transition",
+          role === "sponsor" ? "bg-[var(--accent)] text-white shadow-[var(--halo)]" : "text-[var(--text)] hover:bg-[var(--surface)]"
+        )}
+        onClick={() => setRole("sponsor")}
+      >
+        Patrocinador
+      </button>
+    </div>
+  );
+}
+TSX
+
+# --- 3) ClientShell: adiciona respiro horizontal padrão ---
+cat > components/ClientShell.tsx <<'TSX'
+"use client";
+
+import { ReactNode, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Topbar from "@/components/ui/Topbar";
+import { readSession, setThemeAttr } from "@/components/lib/session";
+
+export default function ClientShell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { role } = readSession();
+
+  useEffect(() => {
+    // null => respeita preferência salva/tema do papel
+    setThemeAttr(null, role);
+  }, [role]);
+
+  const isAuth = pathname === "/login" || pathname === "/forgot-password";
+
+  if (isAuth) return <>{children}</>;
+
+  return (
+    <>
+      <Topbar />
+      <main className="min-h-[70vh]">
+        <div className="mx-auto max-w-screen-2xl px-4 md:px-6 py-6">
+          {children}
+        </div>
+      </main>
+    </>
+  );
+}
+TSX
+
+echo "== Build =="
+pnpm build
